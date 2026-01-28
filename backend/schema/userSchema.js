@@ -1,40 +1,57 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-    name:{ 
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      minlength: [6, "Password must be atleast 6 characters"],
+      required: function () {
+        return !this.googleId; // If logging in with Google, password is not required
+      },
+      trim: true,
+    },
+    googleId: {
+      type: String,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: "",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin", "superAdmin"],
+      default: "user",
+    },
+    bookings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+      },
+    ],
+    resetOtp: {
         type: String,
-        required: [true,  "Name is required"],
+        default: null,
+
     },
-    email:{
-        type: email,
-        required: [true, "Email is required"],
-        unique: true,
-        trim:true,
-        lowercase:true
-    },
-    password:{
-        type:String,
-        required: true,
-        minlength:[6, "Password must be atleast 6 characters"],
-        trim: true
-    },
-    avatar:{
-        type: String,
-        default:""
-    },
-    role:{
-        type:String,
-        enum:["user", "admin", "superAdmin"],
-        default: "user"
-    },
-    bookings:[
-        {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Booking"
+    resetOtpExpires: {
+        type: Date,
+        default: null,
     }
-]
+  },
+  { timestamps: true },
+);
+const User = mongoose.model("User", userSchema);
 
-},{timestamps: true})
-const User = mongoose.model("User");
-
- export default User;
+export default User;

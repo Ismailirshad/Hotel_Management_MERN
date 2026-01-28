@@ -1,154 +1,159 @@
-import { useState } from "react";
-import { FaHome, FaFilm, FaInfoCircle, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { HiOutlineHome, HiOutlineOfficeBuilding, HiOutlineTicket, HiOutlineInformationCircle } from "react-icons/hi"; // Using cleaner, outline icons
+import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { useUserStore } from "../store/useUserStore.js";
+import LoginModal from "./auth/LoginModal.jsx";
+import ForgotPasswordWrapper from "./auth/ForgotPasswordWrapper.jsx";
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [signup, setSignup] = useState(false);
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        password: ""
-    })
+  const { user, logout } = useUserStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const [authMode, setAuthMode] = useState(null);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScroll, setLastScroll] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        setForm({ ...form, [e.target.id]: e.target.value });
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(form);
-    }
-
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      // Logic for hiding/showing
+      setShowNavbar(window.scrollY < lastScroll || window.scrollY < 80);
+      // Logic for background intensity
+      setIsScrolled(window.scrollY > 20);
+      setLastScroll(window.scrollY);
     };
 
-    const navLinks = [
-        { name: "Home", id: "home", icon: <FaHome /> },
-        { name: "Hotels", id: "hotels", icon: <FaFilm /> },
-        { name: "Offers", id: "offers", icon: < FaEnvelope /> },
-        { name: "About us", id: "about", icon: < FaInfoCircle /> },
-    ];
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScroll]);
 
-    return (
-        <nav className="fixed top-0 w-full bg-gray-900/80 text-white shadow-lg z-50 ">
-            <div className="mx-auto px-4">
-                <div className="flex justify-around items-center h-16">
-                    <div className="flex items-center">
-                        <img
-                            src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-                            alt="Theatre Logo"
-                            className="h-8 w-8 rounded-full object-cover"
-                        />
-                        <span className="ml-2 text-xl font-bold">Hotex</span>
-                    </div>
+  const navLinks = [
+    { name: "Home", id: "home", icon: <HiOutlineHome size={18} /> },
+    { name: "Hotels", id: "hotels", icon: <HiOutlineOfficeBuilding size={18} /> },
+    { name: "Offers", id: "offers", icon: <HiOutlineTicket size={18} /> },
+    { name: "About", id: "about", icon: <HiOutlineInformationCircle size={18} /> },
+  ];
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex space-x-8">
-                        {navLinks.map((link, index) => (
-                            <a
-                                key={index}
-                                className="flex items-center space-x-1  transition-all duration-300 ease-in-out hover:scale-60 hover:-translate-y-1"
-                                href={`#${link.id}`}
-                            >
-                                <span>{link.icon}</span>
-                                <span>{link.name}</span>
-                            </a>
-                        ))}
-                    </div>
+  return (
+    <>
+      <nav
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out
+        ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+        ${isScrolled ? "py-3" : "py-5"}`}
+      >
+        {/* Floating Container Look */}
+        <div className={`mx-auto transition-all duration-500 px-4 md:px-10 max-w-7xl`}>
+          <div className={`
+            backdrop-blur-md transition-all duration-500 rounded-[2rem] 
+            ${isScrolled 
+              ? "" 
+              : "bg-white/80"}
+          `}>
+            <div className="flex items-center justify-between h-16 px-6 md:px-8">
 
-                    {/* Mobile Navigation Button */}
-                    <div className="md:hidden ">
-                        <button
-                            onClick={toggleMenu}
-                            className="text-white hover:text-red-500 transition-colors duration-200"
-                        >
-                            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-                        </button>
-                    </div>
-
-
-
-                    {/* <!-- Modal toggle --> */}
-                    <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" className="text-black bg-slate-300 box-border border 
-                     hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-xl text-sm px-4 py-1.5 focus:outline-none
-                      transition-all duration-300 ease-in hover:scale-105" type="button">
-                        {signup ? "Signup" : "Login"}
-                    </button>
-
-                    {/* <!-- Main modal --> */}
-                    <div id="authentication-modal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 
-                    z-80 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                        <div className="relative p-4 w-full max-w-md max-h-full rounded-xl bg-gray-900/80">
-                            {/* <!-- Modal content --> */}
-                            <div className="relative bg-neutral-primary-soft border border-default rounded-xl shadow-sm p-4 md:p-6">
-                                {/* <!-- Modal header --> */}
-                                <div className="flex items-center justify-center pb-4 md:pb-5">
-                                    <h3 className="text-2xl font-medium text-heading px-36">
-                                        {signup ? "Signup" : "Login"}
-                                    </h3>
-                                    <button type="button" className="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="authentication-modal">
-                                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18 17.94 6M18 18 6.06 6" /></svg>
-                                        <span className="sr-only">Close modal</span>
-                                    </button>
-                                </div>
-                                {/* <!-- Modal body --> */}
-                                <form onSubmit={handleSubmit} className="pt-4 md:pt-6">
-                                    {signup && (
-
-                                        <div className="mb-4">
-                                            <label for="name" className="block mb-2.5 text-sm font-medium text-heading">Name</label>
-                                            <input type="text" id="name" value={form.name} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Enter name" required />
-                                        </div>
-                                    )}
-                                    <div >
-                                        <label for="email" className="block mb-2.5 text-sm font-medium text-heading">Email</label>
-                                        <input type="email" id="email" value={form.email} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Enter email" required />
-                                    </div>
-                                    <div>
-                                        <label for="password" className="block mb-2.5 text-sm font-medium text-heading">Password</label>
-                                        <input type="password" id="password" value={form.password} onChange={handleChange} className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
-                                    </div>
-                                    <div className="flex items-start my-6">
-                                        <div className="flex items-center">
-                                            <input type="checkbox" className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft" />
-                                            <label for="checkbox-remember" className="ms-2 text-sm font-medium text-heading">Remember me</label>
-                                        </div>
-                                        <a href="#" className="ms-auto text-sm font-medium text-fg-brand hover:underline">Lost Password?</a>
-                                    </div>
-                                    <button type="submit" className="text-white bg-brand box-border border  hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-xl px-4 py-2.5 focus:outline-none w-full mb-3">{signup ? "Signup" : "Login"} </button>
-                                    <div className="text-sm font-medium text-body">{signup ? "Already have an account?" : "Not registered?"}  <a onClick={() => setSignup(!signup)} className="text-fg-brand hover:underline cursor-pointer">{signup ? "Login" : "Create account"}</a></div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
+              {/* LOGO */}
+              <div className="flex items-center gap-3 group cursor-pointer">
+                <div className="relative">
+                    <img
+                        src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=200"
+                        alt="Logo"
+                        className="h-10 w-10 rounded-full object-cover ring-2  ring-blue-500 transition-all duration-300"
+                    />
+                    <div className="absolute inset-0 rounded-full bg-emerald-500/10 animate-pulse group-hover:hidden" />
                 </div>
+                <span className="text-2xl font-black text-slate-900 tracking-tighter italic">
+                  Hotex<span className="text-emerald-600 not-italic">.</span>
+                </span>
+              </div>
 
-                {/* Mobile Navigation Menu */}
-                {isOpen && (
-                    <div className="md:hidden trnasition-all duration-300 ease-in ">
-                        <div className="px-2 pt-2 pb-3 space-y-1">
-                            {navLinks.map((link, index) => (
-                                <button
-                                    key={index}
-                                    className="flex items-center space-x-2 w-full px-3 py-2 text-white hover:bg-red-700 rounded-md transition-colors duration-200"
-                                >
-                                    <span>{link.icon}</span>
-                                    <span>{link.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+              {/* DESKTOP LINKS - Ultra Clean */}
+              <div className="hidden md:flex items-center gap-8">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={`#${link.id}`}
+                    className="group flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors duration-300"
+                  >
+                    <span className="text-slate-400 group-hover:text-emerald-500 transition-colors">
+                        {link.icon}
+                    </span>
+                    <span className="relative">
+                        {link.name}
+                        <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-emerald-500 transition-all duration-300 group-hover:w-full" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+
+              {/* RIGHT ACTIONS */}
+              <div className="flex items-center gap-3">
+                {user ? (
+                  <button
+                    onClick={logout}
+                    className="hidden md:block px-6 py-2.5 rounded-full bg-slate-900 text-white text-[13px] font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setAuthMode("login")}
+                    className="hidden md:block px-6 py-2.5 rounded-full bg-emerald-600 text-white text-[13px] font-bold hover:bg-emerald-700 transition-all active:scale-95 shadow-lg shadow-emerald-100"
+                  >
+                    Member Login
+                  </button>
                 )}
 
-
+                {/* MOBILE MENU TOGGLE */}
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="p-2 md:hidden rounded-xl bg-slate-100 text-slate-900 hover:bg-slate-200 transition-colors"
+                >
+                  {isOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+                </button>
+              </div>
             </div>
-        </nav>
+          </div>
+        </div>
 
+        {/* MOBILE MENU - Full Screen Overlay Style */}
+        <div className={`
+          absolute top-full left-4 right-4 mt-2 p-6 bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-100 shadow-2xl transition-all duration-300 md:hidden
+          ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10 pointer-events-none"}
+        `}>
+          <div className="flex flex-col gap-5">
+            {navLinks.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-4 text-lg font-bold text-slate-800 hover:text-emerald-600 transition-all"
+              >
+                <div className="p-2 rounded-lg bg-slate-50 text-slate-400">{link.icon}</div>
+                {link.name}
+              </a>
+            ))}
+            <hr className="border-slate-100" />
+            <button className="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold">
+               {user ? "Logout" : "Member Login"}
+            </button>
+          </div>
+        </div>
+      </nav>
 
-    );
+      {/* MODALS */}
+      {authMode === "login" && (
+        <LoginModal
+          setShowModal={() => setAuthMode(null)}
+          openForgot={() => setAuthMode("forgotPassword")}
+        />
+      )}
+      {authMode === "forgotPassword" && (
+        <ForgotPasswordWrapper
+          onClose={() => setAuthMode(null)}
+          openLogin={() => setAuthMode("login")}
+        />
+      )}
+    </>
+  );
 };
 
 export default Navbar;

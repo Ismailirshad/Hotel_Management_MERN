@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import User from '../schema/userSchema';
+import User from '../schema/userSchema.js';
 
 dotenv.config();
 
@@ -35,8 +35,8 @@ export const adminRoute = async (req, res, next) => {
    }
 }
 
-export const managerRoute = async (req, res, next) => {
-   if(req.user && req.user.role === "manager"){
+export const superAdminRoute = async (req, res, next) => {
+   if(req.user && req.user.role === "superAdmin"){
     next();
    }else{
     return res.status(401).json({message: "Access denied - Manager only"})

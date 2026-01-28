@@ -1,72 +1,110 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { hotelStore } from "../store/useHotelStore.js";
+import HotelCardsSkeleton from "./skeletones/HotelCardSkeleton";
 
-const hotels = [{
-    _id:'221222',
-    name: 'Hotel 1',
-    location: 'New York',
-    pricePerNight: 150,
-    imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.434zpISOb40RJ--ePvgsJgHaE8?pid=Api&P=0&h=180',
-    rating: 4.5,
-},
-{
-    _id:'221w2w22w',
-    name: 'Hotel 1',
-    location: 'New York',
-    pricePerNight: 150,
-    imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.434zpISOb40RJ--ePvgsJgHaE8?pid=Api&P=0&h=180',
-    rating: 4.5,
-},
-{
-    _id:'221w2w22w',
-    name: 'Hotel 1',
-    location: 'New York',
-    pricePerNight: 150,
-    imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.434zpISOb40RJ--ePvgsJgHaE8?pid=Api&P=0&h=180',
-    rating: 4.5,
-},
-{
-    _id:'221w2w22w',
-    name: 'Hotel 1',
-    location: 'New York',
-    pricePerNight: 150,
-    imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.434zpISOb40RJ--ePvgsJgHaE8?pid=Api&P=0&h=180',
-    rating: 4.5,
-},
-]
 const HotelCards = () => {
+  const { featuredHotels, hotels, loading } = hotelStore();
+
+  useEffect(() => {
+    featuredHotels();
+  }, [featuredHotels]);
+
+  if(loading){
+    return <HotelCardsSkeleton />
+  }
+
   return (
-    <div id="hotels" className='min-h-screen bg-slate-50 pt-16 '>
-        <div className="max-w-7xl mx-auto ">
-            <div className="flex flex-col items-center">
-                <div className="max-w-3xl text-center space-y-5">
-                <h1 className="text-4xl">Featured Hotels</h1>
-                <p className="text-lg">Our featured hotels provide modern rooms, friendly service, and great access to attractions, ensuring a smooth and enjoyable travel experience always.</p>
-                </div>
-            </div>
+    <section
+      id="hotels"
+      className="relative py-28 bg-gradient-to-b from-white via-slate-50 to-white"
+    >
+      <div className="max-w-7xl mx-auto px-6 space-y-20">
 
-            
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 mt-10">
-            {hotels.map((hotel, index) => (
-            <Link to={`/hotelDetails/${hotel._id}`} key={index} >
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden   bg-liniear-to-t from-black/70 to-transparent transition-transform duration-300
-                hover:scale-105">
-                    <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-48 object-cover"/>
-                    <div className="p-4">
-                        <h2 className="text-xl font-semibold mb-2">{hotel.name}</h2>
-                        <p className="text-gray-600 mb-2">{hotel.location}</p>
-                        <p className="text-gray-800 font-bold mb-2">${hotel.pricePerNight} per night</p>
-                        <p className="text-yellow-500">Rating: {hotel.rating} ⭐</p>
-                        <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Book Now</button>
-                        </div>
-                </div>
-            </Link>
-            ))}
-            </div>
+        {/* SECTION HEADER */}
+        <div className="text-center max-w-3xl mx-auto space-y-6 font-sans">
+          <span className="inline-flex items-center px-6 py-2 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold tracking-[0.35em] uppercase">
+            Handpicked Excellence
+          </span>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
+            Featured{" "}
+            <span className="font-serif italic font-medium text-slate-600">
+              Hotels
+            </span>
+          </h1>
+
+          <p className="text-slate-600 text-lg leading-relaxed max-w-2xl mx-auto">
+            Discover carefully selected hotels offering refined comfort,
+            elegant design, and exceptional hospitality for a truly memorable stay.
+          </p>
         </div>
-      
-    </div>
-  )
-}
 
-export default HotelCards
+        {/* HOTEL GRID */}
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {hotels.map((hotel) => (
+            <Link
+              key={hotel._id}
+              to={`/hotelDetails/${hotel._id}`}
+              className="group"
+            >
+              <div className="relative bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+
+                {/* IMAGE */}
+                <div className="relative h-56 overflow-hidden">
+                  <img
+                    src={hotel.image}
+                    alt={hotel.name}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
+
+                {/* CONTENT */}
+                <div className="p-6 space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 truncate">
+                      {hotel.name}
+                    </h3>
+                    <p className="text-sm text-slate-500">📍 {hotel.city}</p>
+                  </div>
+
+                  {/* RATING */}
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        className={
+                          star <= hotel.rating
+                            ? "text-amber-400"
+                            : "text-slate-300"
+                        }
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* PRICE + CTA */}
+                  <div className="flex items-center justify-between pt-4">
+                    <p className="text-slate-900 font-semibold">
+                      ₹{hotel.startingPrice}
+                      <span className="text-sm text-slate-500"> / night</span>
+                    </p>
+
+                    <span className="px-5 py-1.5 rounded-full text-sm bg-emerald-50 text-emerald-700 border border-emerald-200 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      View Details
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default React.memo(HotelCards);

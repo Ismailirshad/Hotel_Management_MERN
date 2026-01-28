@@ -1,18 +1,22 @@
 import mongoose from 'mongoose';
 
 const hotelSchema = new mongoose.Schema({
-    name:{
-        type: String, required: true
-    },
-    address: {type: String, required: true},
-    city: {type: String, required: true},
-    contact: {type: number, required: true},
-    owner: {type: mongoose.Schema.Types.ObjectId, 
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
-
-}, {timestamps: true} )
+    },
+    name: {
+        type: String, required: true, unique: true,
+    },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    contact: { type: Number, required: true },
+    description: { type: String , required: true},
+    image: { type: String, required: true },
+    rating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 }
+}, { timestamps: true })
 
 const Hotel = mongoose.model("Hotel", hotelSchema)
 

@@ -1,96 +1,137 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { facilityIcons, roomCommonData, roomsDummyData } from '../assets/assets'
+import { facilityIcons, roomCommonData } from '../assets/assets'
+import { roomStore } from '../store/useRoomStore.js';
+import BookingCard from '../components/BookingCard.jsx';
 
 const RoomDetails = () => {
   const { id } = useParams();
-  const [room, setRoom] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const { fetchRoom, room, loading } = roomStore()
 
   useEffect(() => {
-    const room = roomsDummyData.find(room => room._id === id)
-    room && setRoom(room);
-    room && setMainImage(room.images[0]);
-  }, [])
+    fetchRoom(id)
+  }, [id])
+
+  useEffect(() => {
+    if (room?.images?.length) {
+      setMainImage(room?.images[0])
+    }
+  }, [room])
 
   return (
-    <div className='w-full min-h-screen'>
-      <div className="max-w-7xl flex flex-col mx-auto pt-28 ">
+  <div className="min-h-screen bg-slate-50 pt-24 pb-16">
+    <div className="max-w-6xl mx-auto px-4 space-y-10">
 
-        <div className="w-full flex flex-col ">
-          <div className="flex flex-col justify-center items-start gap-3">
-            <div className="flex flex-row justify-center items-center space-x-4 ">
-              <h1 className="text-2xl text-black">{room?.hotel.name}</h1>
-              <p className='text-md'>[{room?.roomType}]</p>
-              <p className='text-sm bg-orange-400 rounded-full px-2  text-white'>20% off</p>
-            </div>
-            <p >⭐⭐⭐⭐⭐ 200+ reviews</p>
-            <p className="text-gray-800/40">{room?.hotel?.address} </p>
-          </div>
-
-          <div className="flex flex-col lg:flex-row mt-6 gap-6">
-            <div className="lg:w-1/2 w-full">
-              <img className='w-full rounded-xl shadow-lg object-cover ' src={mainImage} alt="Room Image" />
-            </div>
-            <div className="grid grid-cols-2 ap-4 lg:w-1/2 w-full">
-              {room?.images.map((img, index) => (
-                <div onClick={() => setMainImage(img)} key={index + 1} className="p-2 w-full">
-                  <img
-                    className={`object-cover cursor-pointer w-full rounded-xl shadow-md ${mainImage === img && 'outline-3 outline-orange-500'} `} src={img} alt={`Room image ${index + 1}`} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-
-
-          <div className='flex flex-col '>
-            <div className="flex flex-row justify-between p-3">
-              <div className="flex flex-col gap-3 border-b border-gray-400/40  pb-6">
-                <h1 className="text-3xl ">Experience Luxury Like Never Before</h1>
-                <div className="flex flex-row gap-2">
-                  {room?.amenities.map((item, idx) => (
-                    <div key={idx} className="flex flex-row items-center gap-1 border-gray-400/40 border p-1 rounded">
-                      <img
-                        src={facilityIcons[item]}
-                        alt={item}
-                        className="w-4 h-4 object-contain"
-                      />
-                      <span>{item} </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-3xl font-semibold">${room?.pricePerNight}/Day</p>
-              </div>
-            </div>
-          </div>
+      {/* HEADER */}
+      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            {room?.hotel?.name}
+          </h1>
+          <span className="text-sm px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+            {room?.roomType}
+          </span>
         </div>
 
-        {/* page 2 */}
-        <div className='items-center flex-col gap-3'>
-          <div className="flex bg-slate-100 shadow-xl justify-between p-5">
-            <div className="flex items-center justify-center ">
-              <div className="flex items-center flex-col p-3">
-                <h2 className="text-md ">Check In</h2>
-                <input type="date" className="text-center text-sm" />
-              </div>
-              <div className="flex items-center flex-col p-3 border-l border-gray-400/40">
-                <h2 className="text-md ">Check Out</h2>
-                <input type="date" className="text-center text-sm" placeholder='Add date' />
-              </div>
-              <div className="flex items-center flex-col border-l border-gray-400/40">
-                <h2 className="text-md ">Guests</h2>
-                <input type="number" max='4' className="text-center text-sm" placeholder='2 guests' />
-              </div>
-            </div>
-            <div className="flex items-center p-5">
-              <button className="bg-blue-500 text-lg px-10 p-3">Check Activity</button>
-            </div>
-          </div>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          {[1, 2, 3, 4, 5].map(star => (
+            <span
+              key={star}
+              className={star <= room?.hotel?.rating ? "text-amber-400" : "text-slate-300"}
+            >
+              ★
+            </span>
+          ))}
+          <span>({room?.hotel?.ratingCount} reviews)</span>
+        </div>
 
-          <div className="flex flex-col py-10  ">
+        <p className="text-slate-500">{room?.hotel?.address}</p>
+      </div>
+
+      {/* IMAGES */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <img
+            src={mainImage}
+            alt="Room"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {room?.images?.map((img, index) => (
+            <div
+              key={index}
+              onClick={() => setMainImage(img)}
+              className={`cursor-pointer rounded-xl overflow-hidden border
+                ${mainImage === img ? "border-emerald-500" : "border-transparent"}
+              `}
+            >
+              <img src={img} className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* DETAILS + BOOKING */}
+<div className="bg-white rounded-3xl shadow-md p-6 lg:p-8 grid lg:grid-cols-3 gap-8">
+
+  {/* LEFT: ROOM INFO */}
+  <div className="lg:col-span-2 space-y-6">
+
+    {/* Price */}
+    <div className="flex items-end gap-2">
+      <p className="text-4xl font-bold text-slate-900">
+        ₹{room?.pricePerNight}
+      </p>
+      <span className="text-base text-slate-500 mb-1">/ night</span>
+    </div>
+
+    <div className="h-px bg-slate-200" />
+
+    {/* Highlights */}
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-slate-900">
+        Room Highlights
+      </h2>
+
+      <div className="flex flex-wrap gap-3">
+        {room?.amenities?.map((item, idx) => (
+          <div
+            key={idx}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-sm text-slate-700 border border-slate-200"
+          >
+            <img
+              src={facilityIcons[item]}
+              alt={item}
+              className="w-4 h-4 opacity-80"
+            />
+            <span className="whitespace-nowrap">{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* RIGHT: BOOKING CARD */}
+  <div className="lg:col-span-1">
+    <div className="sticky top-28">
+      <BookingCard roomId={id} />
+    </div>
+  </div>
+
+</div>
+
+
+      {/* DESCRIPTION */}
+      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-slate-900">Description</h2>
+        <p className="text-slate-600 leading-relaxed">
+          {room?.description}
+        </p>
+
+           <div className="flex flex-col  ">
             {roomCommonData.map((data, index) => (
               <div key={index} className="flex flex-row items-start space-x-3 py-3 ">
                 <img src={data.icon} alt={data.title} className="w-6 h-6" />
@@ -101,38 +142,39 @@ const RoomDetails = () => {
               </div>
             ))}
           </div>
+      </div>
 
-          <div className=" py-5  border-b border-t border-gray-400/40">
-            <p className="text-slate-400">
-              Guest will be allocatd on the ground floor according to the room availability. You get comfortable Two bedroom apartment has a city feeling <br/>
-              The Price quoeted is  for 2 guest, at the guest slot please mark the number of guest to get the exact price of the groups. The Guest will be <br/>
-              allocated ground floor according to availabiity.You get comfortable Two bedroom apartment has a city feeling
+     
+
+      {/* HOST */}
+      <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-4">
+          <img
+            src={room?.hotel?.image}
+            className="w-14 h-14 rounded-full object-cover"
+          />
+          <div>
+            <p className="font-medium text-slate-900">
+              Hosted by {room?.hotel?.name}
+            </p>
+            <p className="text-sm text-slate-500">
+              {room?.hotel?.ratingCount}+ reviews
             </p>
           </div>
-
-            <div className="flex flex-col py-5 border-b border-gray-400/40">
-          <h2 className="text-3xl  py-5">Location</h2>
-          <p className="text-md">{room?.hotel.address}</p>
-          <p className="text-gray-400 text-sm py-2">It's like Home away from Home</p>
-            </div>
         </div>
 
-        <div className="flex flex-col items-start gap-4 py-5">
-          <div className='flex gap-4'>
-            <img src={room?.hotel?.owner.image} alt="host" className='h-14 w-14 md:h-18 md:w-18 rounded-full' />
-          </div>
-          <p className="text-lg md:text-xl"> Hosted By {room?.hotel.name}</p>
-          <div>
-            <p  className='ml-2'>⭐⭐⭐⭐⭐ 200+ reviews</p>
-          </div>
-          <div className="px-6 py-2.5 mt-4 rounded text-white bg-primary hover:bg-primary-dull transition-all cursor-pointer">Contact Now</div>
-        </div>
-
-
-
+        <a
+          href={`tel:${room?.hotel?.contact}`}
+          className="px-6 py-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition"
+        >
+          📞 Contact Host
+        </a>
       </div>
+
     </div>
-  )
+  </div>
+)
+
 }
 
 export default RoomDetails

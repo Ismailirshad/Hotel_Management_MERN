@@ -4,14 +4,20 @@ const roomSchema = new mongoose.Schema({
     hotel: { type: mongoose.Schema.Types.ObjectId, ref: "Hotel", required: true },
     roomType: {
         type: String,
-        enum: ["Single Bed", "Double Bed", " Deluxe", "Suite"],
+        enum: ["Single Bed", "Double Bed", "Deluxe", "Suite"],
         required: true
     },
-    pricePerNight: { type: Number, require: true },
+    pricePerNight: { type: Number, required: true },
+    isAvailable:{ type: Boolean, default: true },
     amenities: { type: [String], default: [] },
-    description: { type: String, required: true },
     images: { type: [String], default: [] },
-    isAvailable: { type: Boolean, default: true }
+    description: { type: String, required: true },
+    roomNumber: {
+        type: String,
+        required: true,
+        maxlength: 3,
+        trim: true
+    },
 }, { timestamps: true })
 
 const Room = mongoose.model("Room", roomSchema);
