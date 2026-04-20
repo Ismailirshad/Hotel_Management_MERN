@@ -46,9 +46,9 @@ export const useUserStore = create((set, get) => ({
     set({ loading: true })
     try {
       const res = await api.post("/auth/logout", {}, { withCredentials: true })
+      toast.success(res.data?.message || "Logged out successfully")
       set({ loading: false, user: null })
       navigate('/')
-      toast.success(res.data.message)
     } catch (error) {
       set({ loading: false })
       toast.error(error.response?.data?.message)

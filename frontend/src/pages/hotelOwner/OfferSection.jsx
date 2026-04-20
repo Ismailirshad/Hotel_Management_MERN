@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { offerStore } from "../../store/useOfferStore";
-import { hotelStore } from "../../store/useHotelStore";
-import OfferSkeleton from "../../components/skeletones/OfferSkeleton";
+import { offerStore } from "../../store/useOfferStore.js";
+import { hotelStore } from "../../store/useHotelStore.js";
+import OfferSkeleton from "../../components/skeletones/adminSkeleton/OfferSkeleton";
 
 const OfferSection = () => {
   const [manageOffer, setManageOffer] = useState(false);
@@ -53,7 +53,7 @@ const OfferSection = () => {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-8">
+    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-0 sm:p-6 md:p-10">
       {/* Header */}
       <div className="max-w-5xl mb-10">
         <h1 className="text-4xl font-semibold">Offer Management</h1>
@@ -201,10 +201,11 @@ const OfferSection = () => {
               <img
                 src={hotel.image}
                 alt={offer.title}
+                loading="lazy"
                 className="w-full h-56 object-cover"
               />
 
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent p-4 flex flex-col justify-end">
+              <div className="absolute inset-0 bg--to-t from-black/80 to-transparent p-4 flex flex-col justify-end">
                 <h3 className="text-white text-xl font-semibold">
                   {offer.title}
                 </h3>

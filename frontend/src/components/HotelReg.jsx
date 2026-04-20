@@ -35,10 +35,10 @@ const HotelReg = () => {
     return (
         <div className='fixed z-100 top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black/70'>
             <form onSubmit={handleSubmit} className="flex bg-white rounded-xl max-w-4xl max-md:mx-2">
-                <img src={assets.regImage} alt="" className='w-1/2 rounded-xl hidden md:block' />
+                <img src={assets.regImage} alt="Register Image" loading="lazy" className='w-1/2 rounded-xl hidden md:block' />
 
                 <div className="relative  flex flex-col items-center md:w-1/2 p-8 md:p-10 ">
-                    <img src={assets.closeIcon} alt="close-icon" className='absolute top-4 right-4 h-4 w-4 cursor-pointer' />
+                    <img src={assets.closeIcon} alt="close-icon" loading="lazy" className='absolute top-4 right-4 h-4 w-4 cursor-pointer' />
                     <p className="text-2xl font-semibold mt-6">Register Your Hotel</p>
 
 
@@ -70,7 +70,7 @@ const HotelReg = () => {
                     <div className="flex flex-col w-full justify-start py-2  items-start ">
                         <label htmlFor="image" className='px-2 text-md text-gray-600' >Hotel Image</label>
                         <div onClick={() => imgRef.current.click()} className='border border-gray-400/40 text-sm outline-indigo-500/70 font-light w-1/3 p-2'>
-                             <img  className='max-h-13 cursor-pointer opacity-80'  src={hotel.image || assets.uploadArea} alt=""  required />
+                             <img  className='max-h-13 cursor-pointer opacity-80'  src={hotel.image || assets.uploadArea} alt="Hotel Image" loading="lazy"  required />
                             <input onChange={handleImageSubmit} type="file" accept='image/*' ref={imgRef} className='sr-only' />
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react"
 import { bookingStore } from "../store/useBookingStore.js";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -105,4 +106,4 @@ const navigate = useNavigate();
   );
 };
 
-export default BookingCard;
+export default React.memo(BookingCard);

@@ -11,6 +11,9 @@ export const bookingStore = create((set, get) => ({
   booking: null,
   bookings: [],
   allBookings: [],
+  page: 1,
+  totalPages: 1,
+  totalBookings: 0,
 
   checkRoomAvailability: async (roomId, checkIn, checkOut) => {
     set({ isRoomAvailable: null, loading: true });
@@ -69,13 +72,19 @@ export const bookingStore = create((set, get) => ({
       toast.error("Failed to load myBookings");
     }
   },
-  fetchAllBookings: async () => {
+  fetchAllBookings: async (newPage = 1) => {
     set({ loading: true });
     try {
-      const res = await api.get("/admin/all-bookings", {
+      const res = await api.get(`/admin/all-bookings?page=${newPage}&limit=5`, {
         withCredentials: true,
       });
-      set({ allBookings: res.data, loading: false });
+      set({
+        allBookings: res.data.bookings,
+        loading: false,
+        page: res.data.page,
+        totalPages: res.data.totalPages,
+        totalBookings: res.data.totalBookings,
+      });
     } catch (error) {
       set({ loading: false });
       console.log("Error in fetchAllBookings store", error);

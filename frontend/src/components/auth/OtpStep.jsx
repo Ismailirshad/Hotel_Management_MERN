@@ -1,6 +1,6 @@
 import React from 'react'
 import toast from 'react-hot-toast';
-import api from '../../lib/axios';
+import api from '../../lib/axios.js';
 
 const OtpStep = ({loading, setLoading, setStep,otp, setOtp, email}) => {
 
@@ -36,7 +36,7 @@ const OtpStep = ({loading, setLoading, setStep,otp, setOtp, email}) => {
                 type="text"
                 maxLength="6"
                 placeholder="· · · · · ·"
-                className="w-full px-4 py-4 bg-gray-900/60 border border-emerald-900/50 text-emerald-400  text-center text-2xl tracking-[1rem] font-mono rounded-xl outline-none transition-all duration-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-emerald-900/50"
+                className="w-full px-4 py-4  border border-emerald-900/50 text-emerald-400  text-center text-2xl tracking-[1rem] font-mono rounded-xl outline-none transition-all duration-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-emerald-900/50"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 required

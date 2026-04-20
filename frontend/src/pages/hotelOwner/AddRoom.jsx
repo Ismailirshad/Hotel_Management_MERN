@@ -47,7 +47,7 @@ const AddRoom = () => {
 
   }
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-8">
+    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-0 sm:p-6 md:p-10">
 
       {/* Header */}
       <div className="max-w-4xl mb-8">
@@ -79,7 +79,8 @@ const AddRoom = () => {
                 <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
                   <img
                     src={images[key] || assets.uploadArea}
-                    alt=""
+                    alt="Room Image"
+                    loading="lazy"
                     className="h-28 w-full object-cover opacity-80 group-hover:opacity-100"
                   />
                 </div>

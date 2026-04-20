@@ -119,6 +119,11 @@ export const createRoom = async (req, res) => {
 
 export const allRooms = async (req, res) => {
   const ownerId = req.user._id;
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const skip = (page - 1) * limit;
+
   try {
     const hotel = await Hotel.findOne({ owner: ownerId });
     if (!hotel) {
@@ -126,7 +131,7 @@ export const allRooms = async (req, res) => {
         .status(404)
         .json({ message: "Hotel registration required to view rooms " });
     }
-    const rooms = await Room.find({ hotel: hotel._id });
+    const rooms = await Room.find({ hotel: hotel._id }).skip(skip).limit(limit);
     if (rooms.length === 0) {
       return res
         .status(404)
@@ -140,7 +145,7 @@ export const allRooms = async (req, res) => {
       checkInDate: { $lt: now },
       checkOutDate: { $gt: now },
       status: { $in: ["booked", "reserved"] },
-    });
+    })
 
     // const busyRoomIds
     const occupiedRoomsIds = bookings.map((booking) => booking.room.toString());
@@ -149,7 +154,14 @@ export const allRooms = async (req, res) => {
       isOccupied: occupiedRoomsIds.includes(room._id.toString()),
     }));
 
-    res.json(availableRooms);
+    const totalRooms = await Room.countDocuments({ hotel: hotel._id });
+
+    res.json({
+      availableRooms,
+      totalRooms,
+      page,
+      totalPages: Math.ceil(totalRooms / limit),
+    });
   } catch (error) {
     console.log("Error in fetching all rooms controller", error);
     res.status(500).json({ message: error.message });
@@ -306,6 +318,11 @@ export const fetchOffer = async (req, res) => {
 
 export const getHotelBookings = async (req, res) => {
   const ownerId = req.user._id;
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const skip = (page - 1) * limit;
+
   try {
     const hotel = await Hotel.findOne({ owner: ownerId });
     if (!hotel) {
@@ -316,9 +333,18 @@ export const getHotelBookings = async (req, res) => {
     const bookings = await Booking.find({ hotel: hotel._id })
       .populate("user", "name email")
       .populate("room", "roomType roomNumber")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json(bookings);
+    const totalBookings = await Booking.countDocuments({ hotel: hotel._id });
+
+    res.status(200).json({
+      bookings,
+      totalBookings,
+      page,
+      totalPages: Math.ceil(totalBookings / limit),
+    });
   } catch (error) {
     console.log("Error in getBookings controller", error);
     res.status(500).json({ message: error.message });
@@ -346,16 +372,16 @@ export const AccountingSummary = async (req, res) => {
     );
 
     const expenses = await Expense.find({
-      expenseFor: "ADMIN",
+      expenseFor: "HOTEL",
       hotel: hotel._id,
     });
     let totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
 
     let totalProfit = totalRevenue - totalExpenses;
 
-    totalRevenue = Math.round(totalRevenue);
-    totalExpenses = Math.round(totalExpenses);
-    totalProfit = Math.round(totalProfit);
+    totalRevenue = totalRevenue;
+    totalExpenses = totalExpenses;
+    totalProfit = totalProfit;
 
     res.json({
       totalRevenue,
@@ -379,7 +405,7 @@ export const AccountingExpense = async (req, res) => {
         .json({ message: "Hotel not found. Please register your hotel" });
     }
     const expenses = await Expense.find({
-      expenseFor: "ADMIN",
+      expenseFor: "HOTEL",
       hotel: hotel._id,
     }).sort({
       createdAt: -1,
@@ -403,11 +429,12 @@ export const addExpense = async (req, res) => {
         .json({ message: "Hotel not found. Please register your hotel" });
     }
     const expense = await Expense.create({
-      expenseFor: "ADMIN",
+      expenseFor: "HOTEL",
       hotel: hotel._id,
       category,
       amount: Number(amount),
       note,
+      createdBy: ownerId,
     });
     res.status(201).json({ message: "Expense added successfully", expense });
   } catch (error) {

@@ -1,132 +1,169 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { CheckCircle2, ReceiptText } from "lucide-react";
-import api from "../lib/axios.js";
-import toast from "react-hot-toast";
+import { CheckCircle2, ReceiptText, ArrowRight, Home } from "lucide-react";
 import { bookingStore } from "../store/useBookingStore.js";
 
 const PaymentSuccessPage = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
 
-//   const [loading, setLoading] = useState(true);
-  const { fetchBooking, booking } = bookingStore()
+  const { fetchBooking, booking } = bookingStore();
 
-  //  Fetch booking summary
   useEffect(() => {
     fetchBooking(bookingId);
   }, [fetchBooking, bookingId]);
 
-//   if (loading) return null;
   if (!booking) return null;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-slate-100 flex items-center justify-center px-4">
-      <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-10 space-y-8">
+    <div className="min-h-screen bg-linear-to-br from-[#0f172a] via-[#111827] to-[#020617] px-4 py-8 flex items-center justify-center">
+      <div className="w-full max-w-5xl bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
 
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="bg-emerald-100 text-emerald-600 p-5 rounded-full">
-              <CheckCircle2 size={64} strokeWidth={1.5} />
+        {/* Top Header */}
+        <div className="px-6 md:px-10 py-8 border-b border-white/10">
+          <div className="flex flex-col md:flex-row md:items-center gap-5">
+            
+            <div className="w-20 h-20 rounded-2xl bg-emerald-500/15 flex items-center justify-center border border-emerald-400/20">
+              <CheckCircle2
+                size={42}
+                className="text-emerald-400"
+                strokeWidth={1.8}
+              />
+            </div>
+
+            <div className="flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-white">
+                Booking Confirmed
+              </h1>
+              <p className="text-slate-300 mt-1 text-sm md:text-base">
+                Your payment was successful and your reservation is confirmed.
+              </p>
+            </div>
+
+            <div className="px-4 py-2 rounded-xl bg-emerald-500/15 text-emerald-300 text-sm font-medium border border-emerald-400/20">
+              {booking.status}
             </div>
           </div>
-
-          <h1 className="text-3xl font-bold text-slate-900">
-            Booking Confirmed 🎉
-          </h1>
-
-          <p className="text-slate-600">
-            Your payment was successful and your booking is now confirmed.
-          </p>
         </div>
 
-        {/* Booking Summary */}
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Content */}
+        <div className="grid lg:grid-cols-2 gap-6 p-6 md:p-10">
 
-          {/* Left */}
-          <div className="space-y-4">
-            <h2 className="font-semibold text-slate-800 text-lg">
+          {/* Left Section */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <h2 className="text-lg font-semibold text-white mb-5">
               Booking Details
             </h2>
 
-            <div className="text-sm text-slate-600 space-y-2">
-              <p><strong>Hotel:</strong> {booking.hotel?.name}</p>
-              <p><strong>Room:</strong> {booking.room?.roomType}</p>
-              <p><strong>Guests:</strong> {booking.guests}</p>
-              <p>
-                <strong>Dates:</strong>{" "}
-                {new Date(booking.checkInDate).toLocaleDateString()} →{" "}
-                {new Date(booking.checkOutDate).toLocaleDateString()}
-              </p>
-              <p><strong>Nights:</strong> {booking.numberOfNights}</p>
+            <div className="space-y-4 text-sm">
+              <div className="flex justify-between gap-4">
+                <span className="text-slate-300">Hotel</span>
+                <span className="text-white font-medium">
+                  {booking.hotel?.name}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-slate-300">Room</span>
+                <span className="text-white font-medium">
+                  {booking.room?.roomType}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-slate-300">Guests</span>
+                <span className="text-white font-medium">
+                  {booking.guests}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-slate-300">Check In</span>
+                <span className="text-white font-medium">
+                  {new Date(booking.checkInDate).toLocaleDateString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-slate-300">Check Out</span>
+                <span className="text-white font-medium">
+                  {new Date(booking.checkOutDate).toLocaleDateString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4 border-t border-white/10 pt-4">
+                <span className="text-slate-300">Nights</span>
+                <span className="text-white font-semibold">
+                  {booking.numberOfNights}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Right */}
-          <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
-            <h2 className="font-semibold text-slate-800 text-lg flex items-center gap-2">
-              <ReceiptText size={18} />
+          {/* Right Section */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <h2 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
+              <ReceiptText size={18} className="text-cyan-400" />
               Payment Summary
             </h2>
 
-            <div className="flex justify-between text-sm">
-              <span>Price / Night</span>
-              <span>₹{booking.pricePerNight}</span>
-            </div>
-
-            <div className="flex justify-between text-sm">
-              <span>Nights</span>
-              <span>× {booking.numberOfNights}</span>
-            </div>
-
-            {booking.offer && (
-              <div className="flex justify-between text-sm text-emerald-600">
-                <span>Offer Applied</span>
-                <span>-{booking.offer.priceOff}%</span>
+            <div className="space-y-4 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-300">Price / Night</span>
+                <span className="text-white">₹{booking.pricePerNight}</span>
               </div>
-            )}
 
-            <div className="border-t pt-3 flex justify-between font-semibold text-lg">
-              <span>Total Paid</span>
-              <span>₹{booking.totalPrice}</span>
-            </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Nights</span>
+                <span className="text-white">× {booking.numberOfNights}</span>
+              </div>
 
-            <div className="text-xs text-slate-500 pt-2">
-              Transaction ID:{" "}
-              <span className="font-mono">{booking.transactionId}</span>
+              {booking.offer && (
+                <div className="flex justify-between text-emerald-300">
+                  <span>Offer Applied</span>
+                  <span>-{booking.offer.priceOff}%</span>
+                </div>
+              )}
+
+              <div className="border-t border-white/10 pt-4 flex justify-between text-lg font-semibold">
+                <span className="text-white">Total Paid</span>
+                <span className="text-cyan-300">₹{booking.totalPrice}</span>
+              </div>
+
+              <div className="pt-3 text-xs text-slate-300">
+                Transaction ID
+                <div className="mt-1 text-white font-mono break-all">
+                  {booking.transactionId}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Status */}
-        <div className="flex justify-between text-sm text-slate-600 border-t pt-6">
-          <span>Status</span>
-          <span className="text-emerald-600 font-medium capitalize">
-            {booking.status}
-          </span>
+        {/* Bottom Actions */}
+        <div className="px-6 md:px-10 pb-8">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <button
+              onClick={() => navigate("/my-bookings")}
+              className="flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold py-3 rounded-xl transition"
+            >
+              View My Bookings
+              <ArrowRight size={18} />
+            </button>
+
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center justify-center gap-2 border border-white/15 hover:bg-white/5 text-white font-semibold py-3 rounded-xl transition"
+            >
+              <Home size={18} />
+              Go to Home
+            </button>
+          </div>
+
+          <p className="text-center text-xs text-slate-500 mt-5">
+            A confirmation email has been sent with your booking details.
+          </p>
         </div>
-
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 pt-6">
-          <button
-            onClick={() => navigate("/my-bookings")}
-            className="flex-1 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-semibold"
-          >
-            View My Bookings
-          </button>
-
-          <button
-            onClick={() => navigate("/")}
-            className="flex-1 border border-slate-300 hover:border-slate-400 py-3 rounded-xl font-semibold text-slate-700"
-          >
-            Go to Home
-          </button>
-        </div>
-
-        <p className="text-xs text-slate-400 text-center">
-          A confirmation email has been sent with your booking details.
-        </p>
       </div>
     </div>
   );

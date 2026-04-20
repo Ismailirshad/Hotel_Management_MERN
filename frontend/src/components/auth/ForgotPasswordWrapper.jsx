@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import EmailStep from "./EmailStep.jsx";
-import OtpStep from "./OtpStep.jsx";
-import ResetPasswordStep from "./ResetPasswordStep.jsx";
+const EmailStep = React.lazy(() => import("./EmailStep.jsx"))
+const OtpStep = React.lazy(() => import("./OtpStep.jsx"))
+const ResetPasswordStep = React.lazy(() => import("./ResetPasswordStep.jsx"))
 
 const ForgotPasswordFlowModal = ({ onClose, openLogin }) => {
   const [step, setStep] = useState("email");

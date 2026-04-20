@@ -16,6 +16,7 @@ import session from "express-session";
 import passport from "passport";
 import './config/passport.js'
 import superAdminRouter from "./routes/superAdmin/superAdminRoutes.js";
+import requestMessageRoutes from "./routes/user/requestMessageRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -51,3 +52,4 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/superAdmin", superAdminRouter);
+app.use("/api/request", requestMessageRoutes);

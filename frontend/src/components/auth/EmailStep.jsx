@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import api from "../../lib/axios";
+import api from "../../lib/axios.js";
 
 const EmailStep = ({setStep, setLoading , email ,setEmail, loading}) => {
 
@@ -31,7 +31,7 @@ const EmailStep = ({setStep, setLoading , email ,setEmail, loading}) => {
         <input
           type="email"
           placeholder="Enter your email"
-          className="w-full px-4 py-3 bg-gray-900/50 border border-emerald-900/50 text-gray-100 rounded-xl outline-none transition-all duration-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-gray-500"
+          className="w-full px-4 py-3 text-sm border border-emerald-900/50  rounded-xl outline-none transition-all duration-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-gray-500"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required

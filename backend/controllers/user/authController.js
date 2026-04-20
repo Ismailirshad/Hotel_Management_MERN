@@ -22,7 +22,7 @@ export const signup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV == "production",
-      samSite: process.env.NODE_ENV == "production" ? "none" : "strict",
+      sameSite: process.env.NODE_ENV == "production" ? "none" : "strict",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     const { _id } = user;
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
     res.cookie("token", newtoken, {
       httpOnly: true,
       secure: process.env.NODE_ENV == "production",
-      samSite: process.env.NODE_ENV == "production" ? "none" : "strict",
+      sameSite: process.env.NODE_ENV == "production" ? "none" : "strict",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
@@ -78,7 +78,7 @@ export const logout = async (req, res) => {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV == "production",
-      samSite: process.env.NODE_ENV == "production" ? "none" : "strict",
+      sameSite: process.env.NODE_ENV == "production" ? "none" : "strict",
     });
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
@@ -171,3 +171,6 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+

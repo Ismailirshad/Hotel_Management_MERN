@@ -2,10 +2,20 @@ import React, { useEffect, useState } from "react";
 import { assets } from "../../assets/assets";
 import { offerStore } from "../../store/useOfferStore.js";
 import api from "../../lib/axios.js";
-import DashboardSkeleton from "../../components/skeletones/DashboardSkeleton.jsx";
+import DashboardSkeleton from "../../components/skeletones/adminSkeleton/DashboardSkeleton.jsx";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  Cell,
+} from "recharts";
 
 const Dashboard = () => {
-  const { offer } = offerStore();
+  const { offer, fetchOffer } = offerStore();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +33,10 @@ const Dashboard = () => {
       }
     };
     fetchDashboardData();
+    fetchOffer();
   }, []);
   console.log("Dashboard Data", dashboardData);
+
   if (loading || !dashboardData) {
     return (
       <div className="min-h-screen bg-[#0f1220] flex items-center justify-center">
@@ -32,8 +44,16 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  const graphData = [
+    { name: "Bookings", value: dashboardData.totalBookings },
+    { name: "Rooms", value: dashboardData.availableRooms },
+    { name: "CheckIn", value: dashboardData.checkInGuests },
+    { name: "Reserved", value: dashboardData.reservedGuests },
+  ];
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-8">
+    <div className="min-h-screen bg-linear-to-br from-[#0f1220] to-[#111827] text-gray-200 p-0 sm:p-6 md:p-10">
       {/* Header */}
       <div className="max-w-4xl space-y-3">
         <h1 className="text-4xl font-semibold tracking-tight">Dashboard</h1>
@@ -48,7 +68,12 @@ const Dashboard = () => {
         {/* Total Bookings */}
         <div className="bg-[#1a1d2e]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center gap-4 shadow-lg">
           <div className="p-3 rounded-xl bg-[#7de2d1]/20">
-            <img src={assets.totalBookingIcon} alt="" className="w-8 h-8" />
+            <img
+              src={assets.totalBookingIcon}
+              alt="Booking Icon"
+              loading="lazy"
+              className="w-8 h-8"
+            />
           </div>
           <div>
             <p className="text-sm text-gray-400">Total Bookings</p>
@@ -61,12 +86,17 @@ const Dashboard = () => {
         {/* Total Revenue */}
         <div className="bg-[#1a1d2e]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center gap-4 shadow-lg">
           <div className="p-3 rounded-xl bg-[#38bdf8]/20">
-            <img src={assets.totalRevenueIcon} alt="" className="w-8 h-8" />
+            <img
+              src={assets.totalRevenueIcon}
+              alt="Revenue Icon"
+              loading="lazy"
+              className="w-8 h-8"
+            />
           </div>
           <div>
             <p className="text-sm text-gray-400">Total Revenue</p>
             <p className="text-2xl font-semibold text-[#38bdf8]">
-              ₹{dashboardData.totalRevenue}
+              ₹{dashboardData.totalRevenue.toFixed(2)}
             </p>
           </div>
         </div>
@@ -74,7 +104,12 @@ const Dashboard = () => {
         {/* CheckIn */}
         <div className="bg-[#1a1d2e]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center gap-4 shadow-lg">
           <div className="p-3 rounded-xl bg-[#7de2d1]/20">
-            <img src={assets.totalBookingIcon} alt="" className="w-8 h-8" />
+            <img
+              src={assets.totalBookingIcon}
+              alt="CheckIn Icon"
+              loading="lazy"
+              className="w-8 h-8"
+            />
           </div>
           <div>
             <p className="text-sm text-gray-400">CheckIn Guests</p>
@@ -87,7 +122,12 @@ const Dashboard = () => {
         {/* Reserved */}
         <div className="bg-[#1a1d2e]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center gap-4 shadow-lg">
           <div className="p-3 rounded-xl bg-[#7de2d1]/20">
-            <img src={assets.totalBookingIcon} alt="" className="w-8 h-8" />
+            <img
+              src={assets.totalBookingIcon}
+              alt="Reserved Icon"
+              loading="lazy"
+              className="w-8 h-8"
+            />
           </div>
           <div>
             <p className="text-sm text-gray-400">Reserved Guests </p>
@@ -100,7 +140,12 @@ const Dashboard = () => {
         {/* Total Available */}
         <div className="bg-[#1a1d2e]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center gap-4 shadow-lg">
           <div className="p-3 rounded-xl bg-[#7de2d1]/20">
-            <img src={assets.totalBookingIcon} alt="" className="w-8 h-8" />
+            <img
+              src={assets.totalBookingIcon}
+              alt="Available Icon"
+              loading="lazy"
+              className="w-8 h-8"
+            />
           </div>
           <div>
             <p className="text-sm text-gray-400">Available Rooms</p>
@@ -127,7 +172,8 @@ const Dashboard = () => {
                   {offer.priceOff}% OFF
                 </p>
                 <p className="text-xs text-gray-400">
-                  Expires on {new Date(offer.expiryDate).toLocaleDateString()}
+                  Expires on{" "}
+                  {new Date(offer.expiryDate).toLocaleDateString("en-GB")}
                 </p>
               </>
             ) : (
@@ -147,6 +193,24 @@ const Dashboard = () => {
               </span>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="bg-[#1a1d2e]/90 border border-white/5 rounded-2xl p-6 shadow-lg mt-5">
+        <h2 className="text-2xl font-bold text-slat-200 mb-4">
+          Platform Analytics
+        </h2>
+
+        <div className="h-[380px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={graphData}>
+              <CartesianGrid stroke="#475569" strokeDasharray="3 3" />
+              <XAxis dataKey="name" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
+              <Tooltip />
+              <Bar dataKey="value" fill="#38bdf8" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

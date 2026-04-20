@@ -1,69 +1,113 @@
-import React from 'react'
-// import {locationIcon} from '../assets/assets.js'
-import { assets } from '../assets/assets.js'
-import { FaAssistiveListeningSystems } from 'react-icons/fa'
+import { useEffect, useState } from "react";
+import { assets } from "../assets/assets.js";
+import { Link, useNavigate } from "react-router-dom";
+import { roomStore } from "../store/useRoomStore.js";
+import { memo } from "react";
+
 const Hero = () => {
+  const { fetchAllRooms, rooms, loading } = roomStore();
+  const [destination, setDestination] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllRooms();
+  }, []);
+
+  const cities = [...new Set(rooms.map((room) => room.hotel.city))];
+
+  const handleSearchCity = (e) => {
+    e.preventDefault();
+
+    if (destination) {
+      navigate(`/rooms?city=${destination}`);
+    }
+  };
+
   return (
-    <div id="home" className='w-full h-screen bg-[url("/hero-img.jpg")] bg-center  bg-cover relative'>
-      <div className="flex items-center px-40  w-full h-screen">
-        <div className="flex flex-col items-start space-y-3 pt-44">
-          <h1 className='text-slate-300 text-2xl'>The Ultimate Hotel Experience</h1>
-          <h1 className="text-5xl text-slate-300 font-extrabold">Sleep Like a Baby</h1>
-          <p className='text-slate-100'>Luxury and comfort await at the world's most <br />
-            exclusive hotels and resorts. Start your booking today</p>
-          <div className="bg-slate-100 flex space-x-2 p-3 rounded-lg">
-            <form class="flex  mx-auto justify-around text-center gap-3 ">
-              <div className="flex flex-col items-center">
-                <label for="countries" class="items-center mb-2.5 text-sm font-medium text-heading flex">  <img  src={assets.locationIcon} alt="" className='h-6 w-6' />Destination</label>
-                <select id="countries" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
-                  <option selected>Choose a country</option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
-              </div>
+    <div
+      id="home"
+      className='w-full h-screen bg-[url("/hero-img.jpg")] bg-center px-2 sm:px-10 md:px-40 bg-cover relative'
+    >
+      <div className="flex items-center   w-full h-screen">
+        <div className="flex flex-col items-start space-y-3 pt-30">
+          <h1 className="text-slate-300 text-2xl">
+            The Ultimate Hotel Experience
+          </h1>
+          <h1 className="text-5xl text-slate-300 font-extrabold">
+            Sleep Like a Baby
+          </h1>
+          <p className="text-slate-100">
+            Luxury and comfort await at the world's most <br />
+            exclusive hotels and resorts. Start your booking today
+          </p>
+          <div className="flex flex-wrap items-center gap-3 mb-1">
+            <Link
+              to="/my-bookings"
+              className="px-5 py-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-sm font-medium hover:bg-white/20 transition-all duration-300"
+            >
+              My Bookings
+            </Link>
 
-              <div className="flex flex-col items-center ">
-                <label for="countries" class="flex items-center  mb-2.5 text-sm font-medium text-heading"> <img  src={assets.calenderIcon} alt="" className='h-6 w-6 mr-1' />Select Date</label>
+            <Link
+              to="/rooms"
+              className="px-5 py-2.5 rounded-full bg-white/5 border border-white/20 backdrop-blur-md text-white text-sm font-medium hover:bg-white/15 transition-all duration-300"
+            >
+              Explore Rooms
+            </Link>
+          </div>
 
-                <div id="date-range-picker" date-rangepicker class="flex items-center">
-                  <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" /></svg>
-                    </div>
-                    <input id="datepicker-range-start" name="start" type="date" class="block w-full ps-9 pe-3  bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Select date start" />
-                  </div>
-                  <span class="mx-4 text-body">to</span>
-                  <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" /></svg>
-                    </div>
-                    <input id="datepicker-range-end" name="end" type="date" class="block w-full ps-9 pe-3  bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Select date end" />
-                  </div>
+          <div className="mt-0 flex justify-center">
+            <form
+              onSubmit={handleSearchCity}
+              className="w-full max-w-xl bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-4"
+            >
+              {/* Heading */}
+              <p className="text-lg font-semibold text-slate-800 mb-3">
+                🔍 Check rooms for your destination
+              </p>
+
+              {/* Input Row */}
+              <div className="flex items-center gap-3">
+                {/* Destination */}
+                <div className="flex items-center gap-2 flex-1 border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 focus-within:ring-2 focus-within:ring-emerald-400">
+                  <img
+                    src={assets.locationIcon}
+                    loading="lazy"
+                    className="h-5 w-5 opacity-60"
+                  />
+
+                  <select
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    className="w-full bg-transparent outline-none text-sm text-slate-700"
+                  >
+                    <option className="hidden sm:flex" value="">
+                      {window.innerWidth < 400 ? "......" : "Where are you going?"}
+                    </option>
+
+                    {cities.map((city, i) => (
+                      <option key={i} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
+                {/* Button */}
+                <button
+                  type="submit"
+                  disabled={!destination}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50"
+                >
+                  Search
+                </button>
               </div>
-
-              <div className="flex flex-col items-center  ">
-                <label for="countries" class="flex items-center mb-2.5 text-sm font-medium text-heading "> <img src={assets.userIcon} alt='' className='h-6 w-6 bg-black rounded-full mr-1' />Guest</label>
-                <input type="number" min="1" max="4" class="block w-full px-5 py-2.5 bg-neutral-secondary-medium  text-black border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" placeholder="1" />
-              </div>
-
-              <div className="flex flex-col items-center justify-center">
-                <button className="bg-black text-white px-4 py-2 rounded-sm">Search</button>
-
-              </div>
-
             </form>
           </div>
         </div>
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Hero
+export default memo(Hero);

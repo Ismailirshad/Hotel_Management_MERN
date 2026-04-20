@@ -45,6 +45,7 @@ const SideBar = () => {
       items-center
       py-8
       gap-6
+      fixed
     "
     >
       {/* Brand / Title */}

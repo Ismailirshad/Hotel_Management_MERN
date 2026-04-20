@@ -92,6 +92,7 @@ export const featuredHotels = async (req, res) => {
           rating: 1,
           image: 1,
           startingPrice: 1,
+          ratingCount: 1,
         },
       },
     ]);

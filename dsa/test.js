@@ -94,3 +94,11 @@ const chunk = (arr, size) => {
 }
 
 console.log(chunk([5,5,8,3,2,1,4,5,5,4,4,4,4], 4))
+
+function recursion(n){
+    if(n == 0 ) return
+
+    console.log(n)
+    recursion(n-1)
+}
+recursion(8)

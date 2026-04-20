@@ -186,13 +186,14 @@ export const getBookingById = async (req, res) => {
 export const getAllBookings = async (req, res) => {
   const userId = req.user._id;
   try {
-    const bookings = await Booking.find({ user: userId })
+    const bookings = await Booking.find({ user: userId, status: { $in : ["completed"]} })
       .populate("hotel")
-      .populate("room");
+      .populate("room")
+      .sort({ createdAt: -1 });
     if (!bookings) {
       return res.status(404).json({ message: "No bookings found" });
     }
-   //Updating booking status before fetching
+    //Updating booking status before fetching
     const now = new Date();
     for (let booking of bookings) {
       if (booking.checkOutDate < now && booking.status === "booked") {
@@ -204,6 +205,30 @@ export const getAllBookings = async (req, res) => {
     res.json(bookings);
   } catch (error) {
     console.log("Error in getAllBookings controller", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getReviews = async (req, res) => {
+  try {
+    const reviews = await Booking.aggregate([
+      {
+        $match: {
+          rating: { $gt: 0 },
+        },
+      },
+      {
+        $sample: { size: 3 },
+      },
+    ]);
+
+    const populatedReviews = await Booking.populate(reviews,[
+        {path: "user", select: "name"},
+        {path: "hotel", select: "image name city"}
+    ])
+    res.json(populatedReviews);
+  } catch (error) {
+    console.log("Error in getReviews controller", error);
     res.status(500).json({ message: "Server error" });
   }
 };

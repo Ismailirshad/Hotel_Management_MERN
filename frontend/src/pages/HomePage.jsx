@@ -1,22 +1,18 @@
-import React from 'react'
-import Hero from '../components/Hero'
-import HotelCards from '../components/HotelCards'
-import ExclusiveOffer from '../components/ExclusiveOffer'
-import Testimonials from '../components/Testimonials'
-import NewsLetters from '../components/NewsLetters'
-import Footer from '../components/Footer'
+import { lazy } from "react";
+const Hero = lazy(() => import("../components/Hero.jsx"));
+const HotelCards = lazy(() => import("../components/HotelCards.jsx"));
+const ExclusiveOffer = lazy(() => import("../components/ExclusiveOffer.jsx"));
+const Testimonials = lazy(() => import("../components/Testimonials.jsx"));
 
 const HomePage = () => {
-    return (
-        <div>
-            <Hero />
-            <HotelCards />
-            <ExclusiveOffer />
-            <Testimonials />
-            
-           
-        </div>
-    )
-}
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Hero />
+      <HotelCards />
+      <ExclusiveOffer />
+      <Testimonials />
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;
