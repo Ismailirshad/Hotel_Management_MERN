@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Outlet } from "react-router-dom";
-const SuperAdminNavbar = React.lazy(() => import("../../components/superAdmin/SuperAdminNavbar.jsx"))
-const SuperAdminSideBar = React.lazy(() => import("../../components/superAdmin/superAdminSidebar.jsx"))
+const SuperAdminNavbar = React.lazy(
+  () => import("../../components/superAdmin/SuperAdminNavbar.jsx"),
+);
+const SuperAdminSideBar = React.lazy(
+  () => import("../../components/superAdmin/superAdminSidebar.jsx"),
+);
 
 const SuperAdminLayout = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
 
+  const toggleSidebar = useCallback(() => {
+    setOpenSideBar((current) => !current);
+  }, []);
+
   return (
     <div className="min-h-screen bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]">
       <SuperAdminNavbar
-        toggleSidebar={() => setOpenSideBar(!openSideBar)}
+        toggleSidebar={toggleSidebar}
         openSideBar={openSideBar}
       />
 
@@ -39,6 +47,8 @@ const SuperAdminLayout = () => {
             <Outlet />
           </div>
         </main>
+
+        
       </div>
     </div>
   );

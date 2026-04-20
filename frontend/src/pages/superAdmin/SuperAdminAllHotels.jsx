@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Search,
   MapPin,
@@ -10,8 +9,8 @@ import {
   Building2,
   Eye,
 } from "lucide-react";
-import api from "../../lib/axios.js";
 import toast from "react-hot-toast";
+import api from "../../lib/axios.js";
 import SuperAdminAllHotelsSkeleton from "../../components/skeletones/superAdminSkeleton/AllHotelsSkeleton.jsx";
 
 const SuperAdminAllHotels = () => {
@@ -37,31 +36,36 @@ const SuperAdminAllHotels = () => {
     fetchAllHotels();
   }, []);
 
-   const toggleHotel = async (hotelId) => {
-      try {
-        const res = await api.patch(`/superAdmin/toggleHotel/${hotelId}`, {
-          withCredentials: true,
-        });
-        console.log("Toggle Hotel Response", res.data);
-        fetchAllHotels();
-        toast.success("Hotel availability updated");
-      } catch (error) {
-        console.log("Error in toggling hotel availability", error);
-        toast.error("Error in toggling hotel availability");
-      }
-    };
+  const toggleHotel = async (hotelId) => {
+    try {
+      await api.patch(`/superAdmin/toggleHotel/${hotelId}`, {
+        withCredentials: true,
+      });
+      setHotels((prev) => {
+        return prev.map((hotel) =>
+          hotel._id === hotelId
+            ? { ...hotel, is_hotelAvailable: !hotel.is_hotelAvailable }
+            : hotel,
+        );
+      });
+      toast.success("Hotel availability updated");
+    } catch (error) {
+      console.log("Error in toggling hotel availability", error);
+      toast.error("Error in toggling hotel availability");
+    }
+  };
 
   useEffect(() => {
     const filtered = hotels.filter(
       (hotel) =>
         hotel.name.toLowerCase().includes(search.toLowerCase()) ||
-        hotel.city.toLowerCase().includes(search.toLowerCase())
+        hotel.city.toLowerCase().includes(search.toLowerCase()),
     );
     setFilteredHotels(filtered);
   }, [search, hotels]);
 
-  if (loading){
-    return <SuperAdminAllHotelsSkeleton />
+  if (loading) {
+    return <SuperAdminAllHotelsSkeleton />;
   }
 
   return (
@@ -69,9 +73,7 @@ const SuperAdminAllHotels = () => {
       {/* Header */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#1e1e1e]">
-            All Hotels
-          </h1>
+          <h1 className="text-3xl font-bold text-[#1e1e1e]">All Hotels</h1>
           <p className="text-gray-500 mt-1">
             Manage and monitor all registered hotels
           </p>
@@ -97,7 +99,7 @@ const SuperAdminAllHotels = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
           <p className="text-sm text-gray-500">Total Hotels</p>
-          <h2 className="text-2xl font-bold mt-1">{hotels.length}</h2>
+          <h2 className="text-2xl font-bold mt-1">{hotels?.length}</h2>
         </div>
 
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -176,21 +178,19 @@ const SuperAdminAllHotels = () => {
                     Added {new Date(hotel.createdAt).toLocaleDateString()}
                   </span>
 
-                  
-                   <div className="px-4 py-4 text-center">
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="sr-only peer"
-                          checked={hotel.is_hotelAvailable}
-                          onChange={() => toggleHotel(hotel._id)}
-                        />
-                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-emerald-500 transition-colors"></div>
-                        <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
-                      </label>
-                    </div>
+                  <div className="px-4 py-4 text-center">
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={hotel.is_hotelAvailable}
+                        onChange={() => toggleHotel(hotel._id)}
+                      />
+                      <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-emerald-500 transition-colors"></div>
+                      <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                    </label>
+                  </div>
                 </div>
-                
               </div>
             </div>
           ))}
@@ -200,4 +200,4 @@ const SuperAdminAllHotels = () => {
   );
 };
 
-export default SuperAdminAllHotels;
+export default memo(SuperAdminAllHotels);

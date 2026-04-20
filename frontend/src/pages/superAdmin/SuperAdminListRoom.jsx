@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import api from "../../lib/axios.js";
 import {
   BedDouble,
@@ -15,26 +15,23 @@ const SuperAdminListRoom = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRooms, setTotalRooms] = useState(0);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get(
-          `/superAdmin/allRooms?page=${page}&limit=10`,
-          {
-            withCredentials: true,
-          },
-        );
-        setRooms(res.data.availableRooms);
-        setTotalPages(res.data.totalPages);
-        setTotalRooms(res.data.totalRooms);
-      } catch (error) {
-        console.error("Error fetching rooms:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchRooms = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get(`/superAdmin/allRooms?page=${page}&limit=10`, {
+        withCredentials: true,
+      });
+      setRooms(res.data.availableRooms);
+      setTotalPages(res.data.totalPages);
+      setTotalRooms(res.data.totalRooms);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchRooms();
   }, [page]);
 
@@ -50,9 +47,7 @@ const SuperAdminListRoom = () => {
           <p className="uppercase tracking-[0.35em] text-xs font-semibold text-[#b88917] mb-3">
             Property Control Center
           </p>
-
           <h1 className="text-4xl font-bold text-slate-900">Room Listings</h1>
-
           <p className="text-slate-500 mt-2 max-w-2xl">
             View and monitor all rooms, pricing, occupancy and availability
             across the platform.
@@ -80,86 +75,83 @@ const SuperAdminListRoom = () => {
         </div>
 
         <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-[#eadfca] text-slate-500">
-                  <th className="text-left px-4 py-3">Room No</th>
-                  <th className="text-left px-4 py-3">Room Type</th>
-                  <th className="text-left px-4 py-3">Amenities</th>
-                  <th className="text-left px-4 py-3">Price / Night</th>
-                  <th className="text-center px-4 py-3">Status</th>
-                  <th className="text-center px-4 py-3">Available</th>
-                </tr>
-              </thead>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#eadfca] text-slate-500">
+                <th className="text-left px-4 py-3">Room No</th>
+                <th className="text-left px-4 py-3">Room Type</th>
+                <th className="text-left px-4 py-3">Amenities</th>
+                <th className="text-left px-4 py-3">Price / Night</th>
+                <th className="text-center px-4 py-3">Status</th>
+                <th className="text-center px-4 py-3">Available</th>
+              </tr>
+            </thead>
 
-              <tbody>
-                {rooms?.length > 0 ? (
-                  rooms.map((room, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-[#f2ead9] hover:bg-[#fdfaf4] transition"
-                    >
-                      <td className="px-4 py-4 font-semibold">
-                        #{room.roomNumber}
-                      </td>
+            <tbody>
+              {rooms?.length > 0 ? (
+                rooms.map((room) => (
+                  <tr
+                    key={room._id}
+                    className="border-b border-[#f2ead9] hover:bg-[#fdfaf4] transition"
+                  >
+                    <td className="px-4 py-4 font-semibold">
+                      #{room.roomNumber}
+                    </td>
 
-                      <td className="px-4 py-4">{room.roomType}</td>
+                    <td className="px-4 py-4">{room.roomType}</td>
 
-                      <td className="px-4 py-4 text-slate-500 max-w-xs">
-                        {room.amenities.join(", ")}
-                      </td>
+                    <td className="px-4 py-4 text-slate-500 max-w-xs">
+                      {room.amenities.join(", ")}
+                    </td>
 
-                      <td className="px-4 py-4">
-                        <div className="inline-flex items-center gap-1 font-semibold text-emerald-600">
-                          <BadgeIndianRupee className="w-4 h-4" />
-                          {room.pricePerNight}
-                        </div>
-                      </td>
+                    <td className="px-4 py-4">
+                      <div className="inline-flex items-center gap-1 font-semibold text-emerald-600">
+                        <BadgeIndianRupee className="w-4 h-4" />
+                        {room.pricePerNight}
+                      </div>
+                    </td>
 
-                      {/* Occupied/Vacant */}
-                      <td className="px-4 py-4 text-center">
-                        <span
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
-                            room.isOccupied
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {room.isOccupied ? (
-                            <CircleX className="w-3.5 h-3.5" />
-                          ) : (
-                            <CircleCheck className="w-3.5 h-3.5" />
-                          )}
-                          {room.isOccupied ? "Occupied" : "Vacant"}
-                        </span>
-                      </td>
+                    {/* Occupied/Vacant */}
+                    <td className="px-4 py-4 text-center">
+                      <span
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                          room.isOccupied
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-slate-100 text-slate-600"
+                        }`}
+                      >
+                        {room.isOccupied ? (
+                          <CircleX className="w-3.5 h-3.5" />
+                        ) : (
+                          <CircleCheck className="w-3.5 h-3.5" />
+                        )}
+                        {room.isOccupied ? "Occupied" : "Vacant"}
+                      </span>
+                    </td>
 
-                      {/* Available */}
-                      <td className="px-4 py-4 text-center">
-                        <span
-                          className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                            room.isAvailable
-                              ? "bg-emerald-100 text-emerald-700"
-                              : "bg-rose-100 text-rose-700"
-                          }`}
-                        >
-                          {room.isAvailable ? "Yes" : "No"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="text-center py-10 text-slate-400"
-                    >
-                      No rooms found.
+                    {/* Available */}
+                    <td className="px-4 py-4 text-center">
+                      <span
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+                          room.isAvailable
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-rose-100 text-rose-700"
+                        }`}
+                      >
+                        {room.isAvailable ? "Yes" : "No"}
+                      </span>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-10 text-slate-400">
+                    No rooms found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-5 border-t border-[#eadfca] bg-[#fdfaf4] rounded-b-3xl">
@@ -210,4 +202,4 @@ const SuperAdminListRoom = () => {
   );
 };
 
-export default SuperAdminListRoom;
+export default memo(SuperAdminListRoom);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import api from "../../lib/axios.js";
 import {
   ShieldCheck,
   User,
@@ -8,6 +7,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../lib/axios.js";
 
 const SupportRequest = () => {
   const [loading, setLoading] = useState(false);
@@ -47,11 +47,9 @@ const SupportRequest = () => {
         <p className="text-sm tracking-[4px] text-[#b88a1b] font-semibold uppercase">
           Executive Support Center
         </p>
-
         <h1 className="text-5xl font-bold text-slate-900 mt-2">
           Support Requests
         </h1>
-
         <p className="text-slate-500 mt-3 text-lg">
           Review customer issues and platform support tickets.
         </p>
@@ -139,6 +137,7 @@ const SupportRequest = () => {
           ))}
         </div>
       )}
+      
     </div>
   );
 };

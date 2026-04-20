@@ -8,9 +8,10 @@ import {
   BedDouble,
   ArrowRight,
 } from "lucide-react";
-import api from "../lib/axios.js";
 import toast from "react-hot-toast";
+import api from "../lib/axios.js";
 import { bookingStore } from "../store/useBookingStore.js";
+import PaymentPageSkeleton from "../components/skeletones/PaymentPageSkeleton.jsx";
 
 const PaymentPage = () => {
   const { bookingId } = useParams();
@@ -44,7 +45,7 @@ const PaymentPage = () => {
       const res = await api.post(
         `/payment/create/${bookingId}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const { order } = res.data;
@@ -62,7 +63,7 @@ const PaymentPage = () => {
               bookingId,
               ...response,
             },
-            { withCredentials: true }
+            { withCredentials: true },
           );
 
           toast.success("Payment Successful!");
@@ -89,12 +90,11 @@ const PaymentPage = () => {
     }
   };
 
-  if (!booking) return null;
+  if (!booking) return <PaymentPageSkeleton />;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#0f172a] via-[#111827] to-[#020617] px-4 py-10 flex items-center justify-center">
       <div className="w-full max-w-5xl bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
-
         {/* Header */}
         <div className="px-6 md:px-10 py-6 border-b border-white/10">
           <div className="flex flex-col md:flex-row md:items-center gap-5">
@@ -120,7 +120,6 @@ const PaymentPage = () => {
 
         {/* Content */}
         <div className="grid lg:grid-cols-2 gap-6 p-6 md:p-10">
-
           {/* Left */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold text-white mb-5">
@@ -128,7 +127,6 @@ const PaymentPage = () => {
             </h2>
 
             <div className="space-y-4 text-sm">
-
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Hotel</span>
                 <span className="text-white font-medium">
@@ -151,9 +149,7 @@ const PaymentPage = () => {
                   <Users size={15} />
                   Guests
                 </span>
-                <span className="text-white font-medium">
-                  {booking.guests}
-                </span>
+                <span className="text-white font-medium">{booking.guests}</span>
               </div>
 
               <div className="flex justify-between gap-4">
@@ -189,19 +185,14 @@ const PaymentPage = () => {
             </h2>
 
             <div className="space-y-4 text-sm">
-
               <div className="flex justify-between">
                 <span className="text-slate-300">Price / Night</span>
-                <span className="text-white">
-                  ₹{booking.pricePerNight}
-                </span>
+                <span className="text-white">₹{booking.pricePerNight}</span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-slate-300">Nights</span>
-                <span className="text-white">
-                  × {booking.numberOfNights}
-                </span>
+                <span className="text-white">× {booking.numberOfNights}</span>
               </div>
 
               {booking.offer && (
@@ -213,9 +204,7 @@ const PaymentPage = () => {
 
               <div className="border-t border-white/10 pt-4 flex justify-between text-lg font-semibold">
                 <span className="text-white">Total Amount</span>
-                <span className="text-cyan-300">
-                  ₹{booking.totalPrice}
-                </span>
+                <span className="text-cyan-300">₹{booking.totalPrice}</span>
               </div>
 
               <p className="text-xs text-slate-400 pt-2">

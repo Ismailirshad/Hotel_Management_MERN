@@ -1,8 +1,15 @@
 import { PlusCircle, Wallet, TrendingUp, BadgeIndianRupee } from "lucide-react";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import api from "../../lib/axios.js";
-import { useEffect, useState } from "react";
 import AccountingModuleSkeleton from "../../components/skeletones/superAdminSkeleton/AccountingModuleSkeleton.jsx";
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const SuperAdminAccountingModule = () => {
   const [summary, setSummary] = useState(null);
@@ -14,7 +21,7 @@ const SuperAdminAccountingModule = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  const fetchAccountingData = async () => {
+  const fetchAccountingData = useCallback(async () => {
     setLoading(true);
     try {
       const summaryRes = await api.get("/superAdmin/accounting-summary");
@@ -26,11 +33,11 @@ const SuperAdminAccountingModule = () => {
     } finally {
       setLoading(false);
     }
-  };
+  },[]);
 
   useEffect(() => {
     fetchAccountingData();
-  }, []);
+  }, [fetchAccountingData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,11 +50,15 @@ const SuperAdminAccountingModule = () => {
     }
   };
 
-  console.log("Accounting Summary", summary);
-  const incomeExpenseData = [
-    { name: "Income", value: summary?.totalRevenue },
-    { name: "Expense", value: summary?.totalExpenses },
-  ];
+  const incomeExpenseData = useMemo(() => {
+    if (!summary) return [];
+
+    return [
+      { name: "Income", value: summary?.totalRevenue },
+      { name: "Expense", value: summary?.totalExpenses },
+    ];
+  }, [summary]);
+
   const COLORS = ["#22c55e", "#ef4444"];
 
   return (
@@ -115,35 +126,34 @@ const SuperAdminAccountingModule = () => {
             </div>
           </div>
 
-          
-                {/* Pie Chart */}
-                <div className="bg-white rounded-3xl shadow-lg border border-[#eadfca] p-6 mt-5">
-                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                    Income vs Expense
-                  </h2>
-          
-                  <div className="h-[360px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={incomeExpenseData}
-                          dataKey="value"
-                          innerRadius={80}
-                          outerRadius={120}
-                          paddingAngle={5}
-                          label
-                        >
-                          {incomeExpenseData.map((entry, index) => (
-                            <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-          
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
+          {/* Pie Chart */}
+          <div className="bg-white rounded-3xl shadow-lg border border-[#eadfca] p-6 mt-5">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              Income vs Expense
+            </h2>
+
+            <div className="h-[360px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={incomeExpenseData}
+                    dataKey="value"
+                    innerRadius={80}
+                    outerRadius={120}
+                    paddingAngle={5}
+                    label
+                  >
+                    {incomeExpenseData.map((entry, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
 
           {/* Add Expense Form */}
           <form
@@ -249,10 +259,12 @@ const SuperAdminAccountingModule = () => {
               </table>
             </div>
           </div>
+
+
         </div>
       )}
     </div>
   );
 };
 
-export default SuperAdminAccountingModule;
+export default memo(SuperAdminAccountingModule);

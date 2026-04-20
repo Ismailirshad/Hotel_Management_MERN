@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import { bookingStore } from "../store/useBookingStore.js";
-import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { CalendarDays, CreditCard, MapPin, Users, Star } from "lucide-react";
+import api from "../lib/axios.js";
+import { bookingStore } from "../store/useBookingStore.js";
 import MyBookingsSkeleton from "../components/skeletones/MyBookingsSkeleton.jsx";
 
 const MyBookings = () => {
-  const { myBookings, bookings, loading } = bookingStore();
+  const myBookings = bookingStore((s) => s.myBookings);
+  const bookings = bookingStore((s) => s.bookings);
+  const loading = bookingStore((s) => s.loading);
 
   useEffect(() => {
     myBookings();
-  }, []);
+  }, [myBookings]);
 
   const handleRating = async (bookingId, star) => {
     try {

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import api from "../../lib/axios.js";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import {
   Building2,
   CalendarCheck2,
@@ -21,27 +20,39 @@ import {
   Legend,
   Cell,
 } from "recharts";
+import api from "../../lib/axios.js";
 import DashboardSkeleton from "../../components/skeletones/superAdminSkeleton/DashboardSkeleton.jsx";
 
 const SuperAdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get("/superAdmin", { withCredentials: true });
-        setDashboardData(res.data);
-      } catch (error) {
-        console.log("Error fetching dashboard", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/superAdmin", { withCredentials: true });
+      setDashboardData(res.data);
+    } catch (error) {
+      console.log("Error fetching dashboard", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  const graphData = useMemo(() => {
+    if (!dashboardData) return [];
+
+    return [
+      { name: "Bookings", value: dashboardData.totalBookings },
+      { name: "Rooms", value: dashboardData.availableRooms },
+      { name: "CheckIn", value: dashboardData.checkInGuests },
+      { name: "Reserved", value: dashboardData.reservedGuests },
+    ];
+  }, [dashboardData]);
 
   if (loading || !dashboardData) {
     return (
@@ -50,14 +61,6 @@ const SuperAdminDashboard = () => {
       </div>
     );
   }
-  const graphData = [
-    { name: "Bookings", value: dashboardData.totalBookings },
-    { name: "Rooms", value: dashboardData.availableRooms },
-    { name: "CheckIn", value: dashboardData.checkInGuests },
-    { name: "Reserved", value: dashboardData.reservedGuests },
-  ];
-
-
   return (
     <div className="min-h-screen bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6] text-slate-800 p-0 sm:p-6 md:p-10">
       {/* Header */}
@@ -186,9 +189,8 @@ const SuperAdminDashboard = () => {
           </ResponsiveContainer>
         </div>
       </div>
-
     </div>
   );
 };
 
-export default SuperAdminDashboard;
+export default memo(SuperAdminDashboard);

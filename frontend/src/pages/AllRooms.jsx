@@ -1,12 +1,16 @@
+import React, { useMemo } from "react";
 import { useState } from "react";
-import { assets } from "../assets/assets";
-import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import { memo } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { assets } from "../assets/assets";
 import { roomStore } from "../store/useRoomStore.js";
-import React from "react";
+import RoomCard from "../components/RoomCard.jsx";
 
 const AllRooms = () => {
-  const { fetchAllRooms, rooms } = roomStore();
+  const fetchAllRooms = roomStore((s) => s.fetchAllRooms);
+  const rooms = roomStore((s) => s.rooms);
+
   const [openFilter, setOpenFilter] = useState(false);
   const [seletedeRoomTypes, setSelectedRoomTypes] = useState([]);
   const [selectedPriceRange, setSelectedPriceRange] = useState("null");
@@ -38,61 +42,136 @@ const AllRooms = () => {
     fetchAllRooms();
   }, []);
 
-  let filteredRooms = [...rooms];
+  //   cities for filter dropdown
+  const cities = useMemo(
+    () => [...new Set(rooms.map((room) => room.hotel.city))],
+    [rooms],
+  );
 
-  if (id) {
-    filteredRooms = filteredRooms.filter((room) => room.hotel._id === id);
-  }
+  // Used useMemp to optimize the filtering and sorting of rooms. This way, the filteredRooms array is only recalculated when the dependencies change,
+  // improving performance and preventing unnecessary computations on every render.
+  const filteredRooms = useMemo(() => {
+    let data = [...rooms];
 
-  if (seletedeRoomTypes.length > 0) {
-    filteredRooms = filteredRooms.filter((room) =>
-      seletedeRoomTypes.includes(room.roomType),
-    );
-  }
+    // finding rooms based on hotel id if id is present in url params
+    if (id) {
+      data = data.filter((room) => room.hotel._id === id);
+    }
+
+    // if filter applied for room types
+    if (seletedeRoomTypes.length > 0) {
+      data = data.filter((room) => seletedeRoomTypes.includes(room.roomType));
+    }
+
+    //   filtered rooms based on price range
+    if (selectedPriceRange !== "null") {
+      data = data.filter((room) => {
+        const price = room.pricePerNight;
+
+        if (selectedPriceRange === "$50 - $150") {
+          return price >= 50 && price <= 150;
+        }
+
+        if (selectedPriceRange === "$151 - $300") {
+          return price >= 151 && price <= 300;
+        }
+
+        if (selectedPriceRange === "$301 - $500") {
+          return price >= 301 && price <= 500;
+        }
+
+        if (selectedPriceRange === "$501+") {
+          return price >= 501;
+        }
+
+        return true;
+      });
+    }
+
+    //   sorted rooms
+    if (selectedSort === "Price: Low to High") {
+      data.sort((a, b) => a.pricePerNight - b.pricePerNight);
+    }
+    if (selectedSort === "Price: High to Low") {
+      data.sort((a, b) => b.pricePerNight - a.pricePerNight);
+    }
+    if (selectedSort === "Rating") {
+      data.sort((a, b) => b.hotel.rating - a.hotel.rating);
+    }
+
+    //  filtered rooms based on city
+    if (selectedCity) {
+      data = data.filter((room) => room.hotel.city === selectedCity);
+    }
+
+    // filtered data returned based on all the applied filters and sorting
+    return data;
+  }, [
+    rooms,
+    id,
+    seletedeRoomTypes,
+    selectedCity,
+    selectedPriceRange,
+    selectedSort,
+  ]);
+
+  // {{---------Without useMemo---------}}
+  // let filteredRooms = [...rooms];
+  // finding rooms based on hotel id if id is present in url params
+  // if (id) {
+  //   filteredRooms = filteredRooms.filter((room) => room.hotel._id === id);
+  // }
+
+  // if (seletedeRoomTypes.length > 0) {
+  //   filteredRooms = filteredRooms.filter((room) =>
+  //     seletedeRoomTypes.includes(room.roomType),
+  //   );
+  // }
 
   //   filtered rooms based on price range
-  if (selectedPriceRange !== "null") {
-    filteredRooms = filteredRooms.filter((room) => {
-      const price = room.pricePerNight;
+  // if (selectedPriceRange !== "null") {
+  //   filteredRooms = filteredRooms.filter((room) => {
+  //     const price = room.pricePerNight;
 
-      if (selectedPriceRange === "$50 - $150") {
-        return price >= 50 && price <= 150;
-      }
+  //     if (selectedPriceRange === "$50 - $150") {
+  //       return price >= 50 && price <= 150;
+  //     }
 
-      if (selectedPriceRange === "$151 - $300") {
-        return price >= 151 && price <= 300;
-      }
+  //     if (selectedPriceRange === "$151 - $300") {
+  //       return price >= 151 && price <= 300;
+  //     }
 
-      if (selectedPriceRange === "$301 - $500") {
-        return price >= 301 && price <= 500;
-      }
+  //     if (selectedPriceRange === "$301 - $500") {
+  //       return price >= 301 && price <= 500;
+  //     }
 
-      if (selectedPriceRange === "$501+") {
-        return price >= 501;
-      }
+  //     if (selectedPriceRange === "$501+") {
+  //       return price >= 501;
+  //     }
 
-      return true;
-    });
-  }
+  //     return true;
+  //   });
+  // }
 
   //   sorted rooms
-  if (selectedSort === "Price: Low to High") {
-    filteredRooms.sort((a, b) => a.pricePerNight - b.pricePerNight);
-  }
-  if (selectedSort === "Price: High to Low") {
-    filteredRooms.sort((a, b) => b.pricePerNight - a.pricePerNight);
-  }
-  if (selectedSort === "Rating") {
-    filteredRooms.sort((a, b) => b.hotel.rating - a.hotel.rating);
-  }
+  // if (selectedSort === "Price: Low to High") {
+  //   filteredRooms.sort((a, b) => a.pricePerNight - b.pricePerNight);
+  // }
+  // if (selectedSort === "Price: High to Low") {
+  //   filteredRooms.sort((a, b) => b.pricePerNight - a.pricePerNight);
+  // }
+  // if (selectedSort === "Rating") {
+  //   filteredRooms.sort((a, b) => b.hotel.rating - a.hotel.rating);
+  // }
 
-  //   filtering rooms based on city
-  const cities = [...new Set(rooms.map((room) => room.hotel.city))];
-  if (selectedCity) {
-    filteredRooms = filteredRooms.filter(
-      (room) => room.hotel.city === selectedCity,
-    );
-  }
+  //  filtered rooms based on city
+  // if (selectedCity) {
+  //   filteredRooms = filteredRooms.filter(
+  //     (room) => room.hotel.city === selectedCity,
+  //   );
+  // }
+
+  // {{---------Without useMemo---------}}
 
   return (
     <section className="bg-slate-50 min-h-screen pt-24">
@@ -349,78 +428,7 @@ const AllRooms = () => {
               </div>
             ) : (
               filteredRooms.map((room) => (
-                <Link
-                  to={`/roomDetails/${room._id}`}
-                  key={room._id}
-                  className="group block"
-                >
-                  <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col md:flex-row gap-4 p-4 md:p-5">
-                    {/* IMAGE */}
-                    <div className="w-full md:w-40 h-48 md:h-32 rounded-xl overflow-hidden shrink-0">
-                      <img
-                        src={room.images[0]}
-                        alt={room.roomType}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                      />
-                    </div>
-
-                    {/* INFO */}
-                    <div className="flex-1 space-y-2 text-left">
-                      <h2 className="text-xl font-semibold text-slate-900">
-                        {room.roomType}
-                      </h2>
-
-                      <p className="text-sm text-slate-500">
-                        📍 {room.hotel.city} · {room.hotel.name}
-                      </p>
-
-                      {/* Rating */}
-                      <div className="flex items-center gap-1 text-sm">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span
-                            key={star}
-                            className={
-                              star <= room.hotel.rating
-                                ? "text-amber-400"
-                                : "text-slate-300"
-                            }
-                          >
-                            ★
-                          </span>
-                        ))}
-                        <span className="text-slate-500 ml-2">
-                          {room.hotel.ratingCount}+ reviews
-                        </span>
-                      </div>
-
-                      {/* Amenities */}
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {room.amenities.slice(0, 3).map((item, idx) => (
-                          <span
-                            key={idx}
-                            className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* PRICE */}
-                    <div className="border-t md:border-t-0 md:border-l border-slate-200 pt-4 md:pt-0 md:pl-4 flex flex-col justify-center items-start md:items-end gap-2">
-                      <p className="text-2xl font-bold text-slate-900">
-                        ₹{room.pricePerNight}
-                      </p>
-
-                      <span className="text-sm text-slate-500">per night</span>
-
-                      <span className="w-full md:w-auto text-center px-4 py-2 rounded-xl text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-600 transition">
-                        View Room
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+                <RoomCard key={room._id} room={room} />
               ))
             )}
           </div>
@@ -430,4 +438,4 @@ const AllRooms = () => {
   );
 };
 
-export default AllRooms;
+export default memo(AllRooms);

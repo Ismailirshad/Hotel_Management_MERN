@@ -1,27 +1,31 @@
 import React, { useEffect } from "react";
+import { memo } from "react";
 import { useParams, Link } from "react-router-dom";
+import { MapPin, Phone, Star, Building2 } from "lucide-react";
+import { facilityIcons } from "../assets/assets.js";
 import { hotelStore } from "../store/useHotelStore.js";
 import { roomStore } from "../store/useRoomStore.js";
-import { facilityIcons } from "../assets/assets.js";
-import { MapPin, Phone, Star, Building2 } from "lucide-react";
 import HotelDetailsSkeleton from "../components/skeletones/HotelDetailsSkeleton.jsx";
 
 const HotelDetails = () => {
   const { id } = useParams();
-  const { hotel, hotelDetails, loading } = hotelStore();
-  const { fetchFeaturedRooms, featuredRooms } = roomStore();
+
+  const hotel = hotelStore((h) => h.hotel);
+  const hotelDetails = hotelStore((h) => h.hotelDetails);
+  const loading = hotelStore((h) => h.loading);
+
+  const fetchFeaturedRooms = roomStore((r) => r.fetchFeaturedRooms);
+  const featuredRooms = roomStore((r) => r.featuredRooms);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     hotelDetails(id);
     fetchFeaturedRooms(id);
-  }, [id]);
+  }, [id, hotelDetails, fetchFeaturedRooms]);
 
   if (loading || !hotel) {
-    return (
-      <HotelDetailsSkeleton />
-    );
+    return <HotelDetailsSkeleton />;
   }
 
   return (
@@ -65,7 +69,7 @@ const HotelDetails = () => {
                   </span>
                 ))}
                 <span className="ml-2 text-sm text-slate-500">
-                  {hotel.rating.toFixed(1)} 
+                  {hotel.rating.toFixed(1)}
                 </span>
                 <span className="text-sm">({hotel.ratingCount}+ reviews)</span>
               </div>
@@ -74,7 +78,9 @@ const HotelDetails = () => {
               <div className="space-y-3 text-slate-600">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-amber-500 mt-1 shrink-0" />
-                  <p>{hotel.city}, {hotel.address}</p>
+                  <p>
+                    {hotel.city}, {hotel.address}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -88,9 +94,7 @@ const HotelDetails = () => {
                 <h2 className="text-xl font-semibold text-slate-900 mb-2">
                   About the Hotel
                 </h2>
-                <p className="text-slate-600 leading-7">
-                  {hotel.description}
-                </p>
+                <p className="text-slate-600 leading-7">{hotel.description}</p>
               </div>
             </div>
           </div>
@@ -202,7 +206,9 @@ const HotelDetails = () => {
             to={`/hotel/${id}/rooms`}
             className="inline-block px-8 py-3 text-xs md:text-base rounded-full bg-slate-900 text-white hover:bg-slate-800 transition font-medium"
           >
-            View All <span className="text-amber-500">{hotel?.name?.toUpperCase()}</span>  Hotel Rooms
+            View All{" "}
+            <span className="text-amber-500">{hotel?.name?.toUpperCase()}</span>{" "}
+            Hotel Rooms
           </Link>
         </div>
       </div>
@@ -210,4 +216,4 @@ const HotelDetails = () => {
   );
 };
 
-export default HotelDetails;
+export default memo(HotelDetails);

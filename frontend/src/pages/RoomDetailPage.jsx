@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { memo } from "react";
 import { facilityIcons, roomCommonData } from "../assets/assets";
 import { roomStore } from "../store/useRoomStore.js";
-import { shallow } from "zustand/shallow";
+import RoomDetailsSkeleton from "../components/skeletones/RoomDetailsSkeleton.jsx";
 const BookingCard = React.lazy(() => import("../components/BookingCard.jsx"));
-import { memo } from "react";
 
 const RoomDetails = () => {
   const { id } = useParams();
   const [mainImage, setMainImage] = useState(null);
-  const { fetchRoom, room, loading } = roomStore(
-    s => ({
-      fetchRoom: s.fetchRoom,
-      room: s.room,
-      loading: s.loading
-    }),
-    shallow
-  );
+  const fetchRoom = roomStore((r) => r.fetchRoom);
+  const room = roomStore((r) => r.room);
+  const loading = roomStore((r) => r.loading);
 
   useEffect(() => {
     fetchRoom(id);
-  }, [id]);
+  }, [id, fetchRoom]);
 
   useEffect(() => {
     if (room?.images?.length) {
@@ -28,10 +23,14 @@ const RoomDetails = () => {
     }
   }, [room]);
 
+  if (loading || !room) {
+    return <RoomDetailsSkeleton />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-4 space-y-10">
-        {/* IMAGES */}
+        {/* Images section  */}
         <div className="grid lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
             {mainImage && (
@@ -66,17 +65,13 @@ const RoomDetails = () => {
 
         {/* DETAILS + BOOKING */}
         <div className="bg-white rounded-3xl shadow-md p-6 lg:p-8 grid lg:grid-cols-3 gap-8">
-          {/* LEFT: ROOM INFO */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-              {/* LEFT INFO */}
               <div className="space-y-3 flex-1 min-w-0">
-                {/* Title + Tag */}
                 <div className="flex flex-wrap items-center gap-3">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 break-words">
                     {room?.hotel?.name}
                   </h1>
-
                   <span className="text-xs sm:text-sm px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">
                     {room?.roomType}
                   </span>

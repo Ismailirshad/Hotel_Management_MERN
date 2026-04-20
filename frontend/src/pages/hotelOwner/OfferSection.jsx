@@ -15,8 +15,12 @@ const OfferSection = () => {
     isActive: true,
   });
 
-  const { offer, createOffer, fetchOffer, loading } = offerStore();
-  const { hotel } = hotelStore();
+  const offer = offerStore((state) => state.offer);
+  const createOffer = offerStore((state) => state.createOffer);
+  const fetchOffer = offerStore((state) => state.fetchOffer);
+  const loading = offerStore((state) => state.loading);
+
+  const hotel = hotelStore((state) => state.hotel);
 
   useEffect(() => {
     fetchOffer();
