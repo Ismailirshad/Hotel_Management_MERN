@@ -23,12 +23,16 @@ export const bookingStore = create((set, get) => ({
         withCredentials: true,
       });
       set({ isRoomAvailable: res.data.available, loading: false });
-      toast.success("Room is available for selected dates");
+      if (res.data.available) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
       return res.data.available;
     } catch (error) {
-      set({ isRoomAvailable: false, loading: false });
+      set({ isRoomAvailable: null, loading: false });
       console.log("Error in checkRoomAvailability store", error);
-      toast.error(error.response?.data?.message);
+      toast.error(error?.response?.data?.message || "Please login first");
     }
   },
   bookRoom: async (roomId, checkIn, checkOut, guests) => {

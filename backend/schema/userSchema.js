@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return !this.googleId; // If logging in with Google, password is not required
       },
-      select: false, // Exclude password from query results by default
     },
     googleId: {
       type: String,
