@@ -22,7 +22,7 @@ export const offerStore = create((set, get) => ({
     set({ loading: true });
     try {
       const res = await api.get("/offers", { withCredentials: true });
-      set({ offers: res.data, loading: false });
+      set({ offers: Array.isArray(res.data) ? res.data : [] , loading: false });
     } catch (error) {
       set({ offers: [], loading: false });
       toast.error(error?.response?.data?.message);

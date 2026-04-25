@@ -52,7 +52,7 @@ const ExclusiveOffer = () => {
           <div className="absolute -top-16 -left-16 w-40 h-40 bg-amber-400/20 blur-3xl rounded-full" />
           <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-blue-500/10 blur-3xl rounded-full" />
 
-          {offers?.length === 0 && (
+          {Array.isArray(offers) && offers.length === 0 && (
             <div className="relative z-10 max-w-2xl mx-auto space-y-4">
               {/* Icon */}
               <div className="relative z-10 flex justify-center mb-6">
@@ -74,63 +74,63 @@ const ExclusiveOffer = () => {
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
               <div
-                className={`grid gap-6 ${
-                  offers?.length === 1
+                className={`grid gap-6 ${Array.isArray(offers) && offers.length === 1
                     ? "grid-cols-1 place-items-center max-w-2xl mx-auto"
-                    : offers?.length === 2
+                    : Array.isArray(offers) && offers.length === 2
                       ? "grid-cols-1 sm:grid-cols-2"
                       : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                }`}
+                  }`}
               >
-                {offers?.map((offer) => (
-                  <div
-                    key={offer?._id}
-                    className="group relative w-full overflow-hidden rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl hover:shadow-amber-500/10 transition-all duration-500"
-                  >
-                    {/* Image */}
-                    <div className="overflow-hidden">
-                      <img
-                        src={offer?.hotel?.image}
-                        alt={offer?.title}
-                        loading="lazy"
-                        className="h-56 sm:h-64 w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    </div>
+                {Array.isArray(offers) &&
+                  offers.map((offer) => (
+                    <div
+                      key={offer?._id}
+                      className="group relative w-full overflow-hidden rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl hover:shadow-amber-500/10 transition-all duration-500"
+                    >
+                      {/* Image */}
+                      <div className="overflow-hidden">
+                        <img
+                          src={offer?.hotel?.image}
+                          alt={offer?.title}
+                          loading="lazy"
+                          className="h-56 sm:h-64 w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      </div>
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
-                    {/* Content */}
-                    <div className="absolute bottom-0 p-6 space-y-2 w-full">
-                      <h2 className="text-white text-xl font-bold">
-                        {offer?.title}
-                      </h2>
+                      {/* Content */}
+                      <div className="absolute bottom-0 p-6 space-y-2 w-full">
+                        <h2 className="text-white text-xl font-bold">
+                          {offer?.title}
+                        </h2>
 
-                      <p className="text-slate-300 text-sm line-clamp-2">
-                        {offer?.description}
-                      </p>
+                        <p className="text-slate-300 text-sm line-clamp-2">
+                          {offer?.description}
+                        </p>
 
-                      <div className="flex items-center justify-between pt-2 flex-wrap gap-2">
-                        <span className="text-amber-400 font-semibold text-xl">
-                          {offer?.hotel?.name}
-                        </span>
-
-                        <span className="text-xs text-slate-400">
-                          <span className="text-red-400 font-bold">
-
-                          Expires:{" "}
+                        <div className="flex items-center justify-between pt-2 flex-wrap gap-2">
+                          <span className="text-amber-400 font-semibold text-xl">
+                            {offer?.hotel?.name}
                           </span>
-                          {new Date(offer?.expiryDate).toLocaleDateString("en-GB")}
-                        </span>
+
+                          <span className="text-xs text-slate-400">
+                            <span className="text-red-400 font-bold">
+
+                              Expires:{" "}
+                            </span>
+                            {new Date(offer?.expiryDate).toLocaleDateString("en-GB")}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Discount Badge */}
+                      <div className="absolute top-4 left-4 bg-amber-400 text-black px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                        {offer?.priceOff}% OFF
                       </div>
                     </div>
-
-                    {/* Discount Badge */}
-                    <div className="absolute top-4 left-4 bg-amber-400 text-black px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                      {offer?.priceOff}% OFF
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
