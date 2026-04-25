@@ -30,12 +30,12 @@ const LoginModal = ({ setShowModal, openForgot }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = import.meta.env.VITE_API_URL;
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 px-4">
-      
+
       {/* MODAL CARD */}
       <div className="relative w-full max-w-md rounded-2xl bg-white/90 backdrop-blur-xl shadow-2xl p-6">
 
@@ -139,7 +139,7 @@ const LoginModal = ({ setShowModal, openForgot }) => {
         </form>
 
         {/* GOOGLE LOGIN */}
-         <button
+        <button
           onClick={handleGoogleLogin}
           className="w-full mt-3 flex items-center justify-center gap-3 bg-gray-800 border border-gray-300 text-slate-200 hover:text-slate-900 font-medium py-1 px-4
            rounded-lg hover:bg-gray-500 transition-colors duration-200 shadow-sm cursor-pointer"
