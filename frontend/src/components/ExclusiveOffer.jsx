@@ -52,7 +52,7 @@ const ExclusiveOffer = () => {
           <div className="absolute -top-16 -left-16 w-40 h-40 bg-amber-400/20 blur-3xl rounded-full" />
           <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-blue-500/10 blur-3xl rounded-full" />
 
-          {offers.length === 0 && (
+          {offers?.length === 0 && (
             <div className="relative z-10 max-w-2xl mx-auto space-y-4">
               {/* Icon */}
               <div className="relative z-10 flex justify-center mb-6">
@@ -75,16 +75,16 @@ const ExclusiveOffer = () => {
             <div className="mx-auto max-w-7xl">
               <div
                 className={`grid gap-6 ${
-                  offers.length === 1
+                  offers?.length === 1
                     ? "grid-cols-1 place-items-center max-w-2xl mx-auto"
-                    : offers.length === 2
+                    : offers?.length === 2
                       ? "grid-cols-1 sm:grid-cols-2"
                       : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
                 }`}
               >
-                {offers.map((offer) => (
+                {offers?.map((offer) => (
                   <div
-                    key={offer._id}
+                    key={offer?._id}
                     className="group relative w-full overflow-hidden rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl hover:shadow-amber-500/10 transition-all duration-500"
                   >
                     {/* Image */}
