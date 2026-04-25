@@ -37,7 +37,7 @@ export const hotelStore = create((set, get) => ({
             const res = await api.get('/hotel/featuredHotels', { withCredentials: true})
             set({ hotels: res.data, loading: false })
         } catch (error) {
-            set({ loading: false })
+            set({ hotels: [], loading: false })
             console.log("Error in fetching all hotels", error)
         }
     },
