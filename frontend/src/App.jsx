@@ -37,19 +37,19 @@ const AccountingModule = lazy(
 
 // Super Admin
 const SuperAdminLayout = lazy(
-  () => import("./pages/superAdmin/superAdminLayout"),
+  () => import("./pages/superAdmin/SuperAdminLayout"),
 );
 const SuperAdminDashboard = lazy(
-  () => import("./pages/superAdmin/superAdminDashboard"),
+  () => import("./pages/superAdmin/SuperAdminDashboard"),
 );
 const SuperAdminListRoom = lazy(
-  () => import("./pages/superAdmin/superAdminListRoom"),
+  () => import("./pages/superAdmin/SuperAdminListRoom"),
 );
 const SuperAdminBookings = lazy(
-  () => import("./pages/superAdmin/superAdminBookings"),
+  () => import("./pages/superAdmin/SuperAdminBookings"),
 );
 const SuperAdminAccountingModule = lazy(
-  () => import("./pages/superAdmin/superAdminAccountingModule"),
+  () => import("./pages/superAdmin/SuperAdminAccountingModule"),
 );
 const SupportRequests = lazy(() => import("./pages/superAdmin/SupportRequest"));
 
