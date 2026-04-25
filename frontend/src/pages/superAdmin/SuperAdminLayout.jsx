@@ -4,7 +4,7 @@ const SuperAdminNavbar = React.lazy(
   () => import("../../components/superAdmin/SuperAdminNavbar.jsx"),
 );
 const SuperAdminSideBar = React.lazy(
-  () => import("../../components/superAdmin/superAdminSidebar.jsx"),
+  () => import("../../components/superAdmin/SuperAdminSidebar.jsx"),
 );
 
 const SuperAdminLayout = () => {
