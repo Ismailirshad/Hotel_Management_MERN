@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import OfferSkeleton from "../../components/skeletones/adminSkeleton/OfferSkeleton";
 import { offerStore } from "../../store/useOfferStore.js";
 import { hotelStore } from "../../store/useHotelStore.js";
-import OfferSkeleton from "../../components/skeletones/adminSkeleton/OfferSkeleton";
 
 const OfferSection = () => {
   const [manageOffer, setManageOffer] = useState(false);
@@ -26,22 +26,25 @@ const OfferSection = () => {
     fetchOffer();
   }, [fetchOffer]);
 
-  useEffect(() => {
+  const handleManageOffer = () => {
     if (offer) {
       setOfferData({
-        title: offer.title,
-        description: offer.description,
-        priceOff: offer.priceOff,
-        expiryDate: offer.expiryDate,
-        isActive: offer.isActive,
+        title: offer.title || "",
+        description: offer.description || "",
+        priceOff: offer.priceOff || 20,
+        expiryDate: offer.expiryDate || "",
+        isActive: offer.isActive ?? true,
       });
     }
-  }, [offer]);
 
-  const handleSubmit = (e) => {
+    setManageOffer(true);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createOffer(offerData);
+    await createOffer(offerData);
     setManageOffer(false);
+    setHasChanges(false);
   };
 
   if (loading) {
@@ -72,15 +75,15 @@ const OfferSection = () => {
         <div className="max-w-5xl mb-6 flex items-center justify-between rounded-xl border border-cyan-400/30 bg-cyan-500/10 p-4">
           <div>
             <p className="text-cyan-400 font-semibold">
-              {offer.isActive ? "🟢 Active Offer" : "🔴 Inactive Offer"}
+              {offer?.isActive ? "🟢 Active Offer" : "🔴 Inactive Offer"}
             </p>
             <p className="text-sm text-gray-300">
-              {offer.title} — {offer.priceOff}% OFF
+              {offer?.title} — {offer?.priceOff}% OFF
             </p>
           </div>
 
           <button
-            onClick={() => setManageOffer(true)}
+            onClick={handleManageOffer}
             className="px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-600"
           >
             Manage Offer
@@ -184,11 +187,10 @@ const OfferSection = () => {
                 type="submit"
                 disabled={!hasChanges}
                 className={`w-full mt-4 py-3 rounded-xl font-semibold
-    ${
-      hasChanges
-        ? "bg-cyan-500 hover:bg-cyan-600 text-black"
-        : "bg-gray-600 cursor-not-allowed text-gray-300"
-    }`}
+    ${hasChanges
+                    ? "bg-cyan-500 hover:bg-cyan-600 text-black"
+                    : "bg-gray-600 cursor-not-allowed text-gray-300"
+                  }`}
               >
                 {offer ? "Update Offer" : "Create Offer"}
               </button>
@@ -203,28 +205,30 @@ const OfferSection = () => {
 
             <div className="relative rounded-xl overflow-hidden">
               <img
-                src={hotel.image}
-                alt={offer.title}
+                src={hotel?.image}
+                alt={offer?.title}
                 loading="lazy"
                 className="w-full h-56 object-cover"
               />
 
               <div className="absolute inset-0 bg--to-t from-black/80 to-transparent p-4 flex flex-col justify-end">
                 <h3 className="text-white text-xl font-semibold">
-                  {offer.title}
+                  {offer?.title}
                 </h3>
-                <p className="text-gray-200 text-sm">{offer.description}</p>
+                <p className="text-gray-200 text-sm">{offer?.description}</p>
                 <p className="text-yellow-300 font-bold">
-                  {offer.priceOff}% OFF
+                  {offer?.priceOff}% OFF
                 </p>
               </div>
 
               <span className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-md text-sm font-semibold">
-                {offer.priceOff}% OFF
+                {offer?.priceOff}% OFF
               </span>
             </div>
           </div>
         )}
+
+
       </div>
     </div>
   );

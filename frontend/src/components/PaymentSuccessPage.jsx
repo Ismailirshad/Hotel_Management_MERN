@@ -7,10 +7,11 @@ const PaymentSuccessPage = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
 
-  const { fetchBooking, booking } = bookingStore();
+  const fetchBooking = bookingStore((state) => state.fetchBooking);
+  const booking = bookingStore((state) => state.booking);
 
   useEffect(() => {
-    fetchBooking(bookingId);
+    if(bookingId) fetchBooking(bookingId);
   }, [fetchBooking, bookingId]);
 
   if (!booking) return null;
@@ -41,7 +42,7 @@ const PaymentSuccessPage = () => {
             </div>
 
             <div className="px-4 py-2 rounded-xl bg-emerald-500/15 text-emerald-300 text-sm font-medium border border-emerald-400/20">
-              {booking.status}
+              {booking?.status}
             </div>
           </div>
         </div>
@@ -59,42 +60,42 @@ const PaymentSuccessPage = () => {
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Hotel</span>
                 <span className="text-white font-medium">
-                  {booking.hotel?.name}
+                  {booking?.hotel?.name}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Room</span>
                 <span className="text-white font-medium">
-                  {booking.room?.roomType}
+                  {booking?.room?.roomType}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Guests</span>
                 <span className="text-white font-medium">
-                  {booking.guests}
+                  {booking?.guests}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Check In</span>
                 <span className="text-white font-medium">
-                  {new Date(booking.checkInDate).toLocaleDateString()}
+                  {new Date(booking?.checkInDate).toLocaleDateString()}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Check Out</span>
                 <span className="text-white font-medium">
-                  {new Date(booking.checkOutDate).toLocaleDateString()}
+                  {new Date(booking?.checkOutDate).toLocaleDateString()}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4 border-t border-white/10 pt-4">
                 <span className="text-slate-300">Nights</span>
                 <span className="text-white font-semibold">
-                  {booking.numberOfNights}
+                  {booking?.numberOfNights}
                 </span>
               </div>
             </div>
@@ -110,30 +111,30 @@ const PaymentSuccessPage = () => {
             <div className="space-y-4 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-300">Price / Night</span>
-                <span className="text-white">₹{booking.pricePerNight}</span>
+                <span className="text-white">₹{booking?.pricePerNight}</span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-slate-300">Nights</span>
-                <span className="text-white">× {booking.numberOfNights}</span>
+                <span className="text-white">× {booking?.numberOfNights}</span>
               </div>
 
-              {booking.offer && (
+              {booking?.offer && (
                 <div className="flex justify-between text-emerald-300">
                   <span>Offer Applied</span>
-                  <span>-{booking.offer.priceOff}%</span>
+                  <span>-{booking?.offer.priceOff}%</span>
                 </div>
               )}
 
               <div className="border-t border-white/10 pt-4 flex justify-between text-lg font-semibold">
                 <span className="text-white">Total Paid</span>
-                <span className="text-cyan-300">₹{booking.totalPrice}</span>
+                <span className="text-cyan-300">₹{booking?.totalPrice}</span>
               </div>
 
               <div className="pt-3 text-xs text-slate-300">
                 Transaction ID
                 <div className="mt-1 text-white font-mono break-all">
-                  {booking.transactionId}
+                  {booking?.transactionId}
                 </div>
               </div>
             </div>

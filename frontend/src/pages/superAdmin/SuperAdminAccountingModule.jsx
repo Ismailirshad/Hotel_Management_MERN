@@ -88,7 +88,7 @@ const SuperAdminAccountingModule = () => {
                 <div>
                   <p className="text-sm text-slate-500">Total Revenue</p>
                   <p className="text-3xl font-bold text-slate-900 mt-2">
-                    ₹{summary.totalRevenue}
+                    ₹{summary?.totalRevenue}
                   </p>
                 </div>
                 <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -102,7 +102,7 @@ const SuperAdminAccountingModule = () => {
                 <div>
                   <p className="text-sm text-slate-500">Total Expenses</p>
                   <p className="text-3xl font-bold text-slate-900 mt-2">
-                    ₹{summary.totalExpenses}
+                    ₹{summary?.totalExpenses}
                   </p>
                 </div>
                 <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -116,7 +116,7 @@ const SuperAdminAccountingModule = () => {
                 <div>
                   <p className="text-sm text-slate-500">Profit</p>
                   <p className="text-3xl font-bold text-slate-900 mt-2">
-                    ₹{summary.totalProfit}
+                    ₹{summary?.totalProfit}
                   </p>
                 </div>
                 <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -232,16 +232,16 @@ const SuperAdminAccountingModule = () => {
                         className="border-b border-[#f2ead9] hover:bg-[#fdfaf4]"
                       >
                         <td className="px-4 py-3">
-                          {new Date(expense.date).toLocaleDateString("en-GB")}
+                          {new Date(expense?.date).toLocaleDateString("en-GB")}
                         </td>
                         <td className="px-4 py-3 font-medium">
-                          {expense.category}
+                          {expense?.category}
                         </td>
                         <td className="px-4 py-3 text-rose-600 font-semibold">
-                          ₹{expense.amount}
+                          ₹{expense?.amount}
                         </td>
                         <td className="px-4 py-3 text-slate-500">
-                          {expense.note || "-"}
+                          {expense?.note || "-"}
                         </td>
                       </tr>
                     ))

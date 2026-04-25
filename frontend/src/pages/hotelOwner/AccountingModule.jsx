@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import api from "../../lib/axios.js";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { PlusCircle } from "lucide-react";
+import api from "../../lib/axios.js";
 import AccountingModuleSkeleton from "../../components/skeletones/adminSkeleton/AccountingModuleSkeleton.jsx";
 import {
   Cell,
@@ -24,12 +24,12 @@ const AccountingModule = () => {
   const fetchAccountingData = async () => {
     setLoading(true);
     try {
-      const summaryRes = await api.get("/admin/accounting-summary");
-      const expensesRes = await api.get("/admin/accounting-expense");
+      const [summaryRes, expensesRes] = await Promise.all([
+        api.get("/admin/accounting-summary"),
+        api.get("/admin/accounting-expense"),
+      ]);
       setSummary(summaryRes.data);
       setExpenses(expensesRes.data);
-      console.log("Accounting Summary", summaryRes.data);
-      console.log("Expenses Data", expensesRes.data);
     } catch (err) {
       console.error("Error loading accounting data", err);
     } finally {
@@ -52,10 +52,13 @@ const AccountingModule = () => {
     }
   };
 
-  const incomeExpenseData = [
-    { name: "Income", value: summary?.totalRevenue },
-    { name: "Expense", value: summary?.totalExpenses },
-  ];
+  const incomeExpenseData = useMemo(
+    () => [
+      { name: "Income", value: summary?.totalRevenue },
+      { name: "Expense", value: summary?.totalExpenses },
+    ],
+    [summary],
+  );
   const COLORS = ["#22c55e", "#ef4444"];
   return (
     <div className="min-h-screen bg-[#0f1220] text-gray-200 p-0 sm:p-6 md:p-10">
@@ -192,14 +195,14 @@ const AccountingModule = () => {
                     expenses.map((expense, i) => (
                       <tr key={i} className="border-b border-white/5">
                         <td className="px-4 py-2 text-gray-300">
-                          {new Date(expense.date).toLocaleDateString()}
+                          {new Date(expense?.date).toLocaleDateString()}
                         </td>
-                        <td className="px-4 py-2">{expense.category}</td>
+                        <td className="px-4 py-2">{expense?.category}</td>
                         <td className="px-4 py-2 text-red-400 font-semibold">
-                          ₹{expense.amount}
+                          ₹{expense?.amount}
                         </td>
                         <td className="px-4 py-2 text-gray-400">
-                          {expense.note || "-"}
+                          {expense?.note || "-"}
                         </td>
                       </tr>
                     ))
@@ -223,4 +226,4 @@ const AccountingModule = () => {
   );
 };
 
-export default AccountingModule;
+export default memo(AccountingModule);

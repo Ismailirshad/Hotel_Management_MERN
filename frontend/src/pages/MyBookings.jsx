@@ -16,12 +16,11 @@ const MyBookings = () => {
 
   const handleRating = async (bookingId, star) => {
     try {
-      const res = await api.patch(
+      await api.patch(
         `/hotel/rating/${bookingId}`,
         { rating: star },
         { withCredentials: true },
       );
-      console.log("Rating Response", res.data);
       toast.success("Rating submitted successfully");
       myBookings();
     } catch (error) {
@@ -93,7 +92,7 @@ const MyBookings = () => {
                     {/* Hotel Info */}
                     <div className="flex flex-col sm:flex-row gap-4 sm:col-span-2 md:col-span-2 xl:col-span-1">
                       <img
-                        src={booking.room.images[0]}
+                        src={booking?.hotel?.image}
                         alt="roomImage"
                         loading="lazy"
                         className="w-full sm:w-44 h-52 sm:h-36 rounded-2xl object-cover shadow-sm"
@@ -102,9 +101,9 @@ const MyBookings = () => {
                       <div className="flex flex-col gap-3 flex-1 min-w-0 ">
                         <div>
                           <h2 className="text-2xl font-semibold text-slate-900">
-                            {booking.hotel.name}
+                            {booking?.hotel?.name}
                             <span className="ml-2 text-sm font-normal text-slate-500">
-                              [{booking.room.roomType}]
+                              {booking?.room?.roomType}
                             </span>
                           </h2>
                         </div>
@@ -112,17 +111,17 @@ const MyBookings = () => {
                         <div className="flex items-start gap-2 text-slate-600 ">
                           <MapPin className="w-4 h-4 mt-1 shrink-0 text-amber-500" />
                           <p className="text-sm leading-6 line-clamp-2">
-                            {booking.hotel.address}
+                            {booking?.hotel?.address}
                           </p>
                         </div>
 
                         <div className="flex items-center gap-2 text-slate-600">
                           <Users className="w-4 h-4 text-amber-500" />
-                          <p className="text-sm">Guests: {booking.guests}</p>
+                          <p className="text-sm">Guests: {booking?.guests}</p>
                         </div>
 
                         <p className="text-lg font-semibold text-slate-900">
-                          Total: ${booking.totalPrice}
+                          Total: ${booking?.totalPrice}
                         </p>
 
                         {/* Rating */}
@@ -166,7 +165,7 @@ const MyBookings = () => {
                             Check-In
                           </p>
                           <p className="text-slate-600 text-sm">
-                            {new Date(booking.checkInDate).toDateString()}
+                            {new Date(booking?.checkInDate).toDateString()}
                           </p>
                         </div>
                       </div>
@@ -178,7 +177,7 @@ const MyBookings = () => {
                             Check-Out
                           </p>
                           <p className="text-slate-600 text-sm">
-                            {new Date(booking.checkOutDate).toDateString()}
+                            {new Date(booking?.checkOutDate).toDateString()}
                           </p>
                         </div>
                       </div>
@@ -195,25 +194,25 @@ const MyBookings = () => {
                           <div className="flex items-center gap-2 mt-1">
                             <div
                               className={`h-2.5 w-2.5 rounded-full ${
-                                booking.paymentStatus
+                                booking?.paymentStatus
                                   ? "bg-green-500"
                                   : "bg-red-500"
                               }`}
                             />
                             <p
                               className={`text-sm font-medium ${
-                                booking.paymentStatus
+                                booking?.paymentStatus
                                   ? "text-green-600"
                                   : "text-red-600"
                               }`}
                             >
-                              {booking.paymentStatus ? "Paid" : "Pending"}
+                              {booking?.paymentStatus ? "Paid" : "Pending"}
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      {!booking.paymentStatus && (
+                      {!booking?.paymentStatus && (
                         <button className="w-fit px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-medium transition">
                           Pay Now
                         </button>

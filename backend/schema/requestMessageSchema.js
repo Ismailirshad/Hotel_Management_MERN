@@ -12,13 +12,13 @@ const requestMessageSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    status:{
+    status: {
       type: String,
       enum: ["open", "resolved"],
-      default: "open"
-    }
+      default: "open",
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const RequestMessage = mongoose.model("RequestMessage", requestMessageSchema);

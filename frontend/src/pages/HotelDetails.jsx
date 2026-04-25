@@ -62,16 +62,16 @@ const HotelDetails = () => {
                   <span
                     key={star}
                     className={`text-2xl ${
-                      star <= hotel.rating ? "text-amber-400" : "text-slate-300"
+                      star <= hotel?.rating ? "text-amber-400" : "text-slate-300"
                     }`}
                   >
                     ★
                   </span>
                 ))}
                 <span className="ml-2 text-sm text-slate-500">
-                  {hotel.rating.toFixed(1)}
+                  {hotel?.rating?.toFixed(1)}
                 </span>
-                <span className="text-sm">({hotel.ratingCount}+ reviews)</span>
+                <span className="text-sm">({hotel?.ratingCount}+ reviews)</span>
               </div>
 
               {/* Info */}
@@ -79,13 +79,13 @@ const HotelDetails = () => {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-amber-500 mt-1 shrink-0" />
                   <p>
-                    {hotel.city}, {hotel.address}
+                    {hotel?.city}, {hotel?.address}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-amber-500 shrink-0" />
-                  <p>{hotel.contact}</p>
+                  <p>{hotel?.contact}</p>
                 </div>
               </div>
 
@@ -94,7 +94,7 @@ const HotelDetails = () => {
                 <h2 className="text-xl font-semibold text-slate-900 mb-2">
                   About the Hotel
                 </h2>
-                <p className="text-slate-600 leading-7">{hotel.description}</p>
+                <p className="text-slate-600 leading-7">{hotel?.description}</p>
               </div>
             </div>
           </div>
@@ -166,13 +166,11 @@ const HotelDetails = () => {
 
                     {/* Amenities */}
                     <div className="grid grid-cols-2 gap-2">
-                      {console.log(room.amenities)}
                       {room.amenities.map((item, idx) => (
                         <div
                           key={idx}
                           className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2"
                         >
-                          {console.log(facilityIcons[item])}
                           <img
                             src={facilityIcons[item]}
                             alt={item}

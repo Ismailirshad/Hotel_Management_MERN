@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-const SideBar = React.lazy(() => import("../../components/hotelOwner/SideBar.jsx"))
 import { hotelStore } from "../../store/useHotelStore.js";
-const HotelReg = React.lazy(() => import("../../components/HotelReg.jsx"))
-const AdminNavbar = React.lazy(() => import("../../components/hotelOwner/AdminNavbar.jsx"))
+const SideBar = React.lazy(
+  () => import("../../components/hotelOwner/SideBar.jsx"),
+);
+const HotelReg = React.lazy(() => import("../../components/HotelReg.jsx"));
+const AdminNavbar = React.lazy(
+  () => import("../../components/hotelOwner/AdminNavbar.jsx"),
+);
 
 const Layout = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
-  const { hotel, getHotel, loading } = hotelStore();
+  const hotel = hotelStore((state) => state.hotel);
+  const getHotel = hotelStore((state) => state.getHotel);
+  const loading = hotelStore((state) => state.loading);
 
   useEffect(() => {
     getHotel();

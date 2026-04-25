@@ -130,7 +130,7 @@ const PaymentPage = () => {
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Hotel</span>
                 <span className="text-white font-medium">
-                  {booking.hotel?.name}
+                  {booking?.hotel?.name}
                 </span>
               </div>
 
@@ -140,7 +140,7 @@ const PaymentPage = () => {
                   Room
                 </span>
                 <span className="text-white font-medium">
-                  {booking.room?.roomType}
+                  {booking?.room?.roomType}
                 </span>
               </div>
 
@@ -149,7 +149,7 @@ const PaymentPage = () => {
                   <Users size={15} />
                   Guests
                 </span>
-                <span className="text-white font-medium">{booking.guests}</span>
+                <span className="text-white font-medium">{booking?.guests}</span>
               </div>
 
               <div className="flex justify-between gap-4">
@@ -158,21 +158,21 @@ const PaymentPage = () => {
                   Check In
                 </span>
                 <span className="text-white font-medium">
-                  {new Date(booking.checkInDate).toLocaleDateString()}
+                  {new Date(booking?.checkInDate).toLocaleDateString()}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-slate-300">Check Out</span>
                 <span className="text-white font-medium">
-                  {new Date(booking.checkOutDate).toLocaleDateString()}
+                  {new Date(booking?.checkOutDate).toLocaleDateString()}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4 border-t border-white/10 pt-4">
                 <span className="text-slate-300">Nights</span>
                 <span className="text-white font-semibold">
-                  {booking.numberOfNights}
+                  {booking?.numberOfNights}
                 </span>
               </div>
             </div>
@@ -187,24 +187,24 @@ const PaymentPage = () => {
             <div className="space-y-4 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-300">Price / Night</span>
-                <span className="text-white">₹{booking.pricePerNight}</span>
+                <span className="text-white">₹{booking?.pricePerNight}</span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-slate-300">Nights</span>
-                <span className="text-white">× {booking.numberOfNights}</span>
+                <span className="text-white">× {booking?.numberOfNights}</span>
               </div>
 
-              {booking.offer && (
+              {booking?.offer && (
                 <div className="flex justify-between text-emerald-300">
                   <span>Offer Applied</span>
-                  <span>-{booking.offer.priceOff}%</span>
+                  <span>-{booking?.offer.priceOff}%</span>
                 </div>
               )}
 
               <div className="border-t border-white/10 pt-4 flex justify-between text-lg font-semibold">
                 <span className="text-white">Total Amount</span>
-                <span className="text-cyan-300">₹{booking.totalPrice}</span>
+                <span className="text-cyan-300">₹{booking?.totalPrice}</span>
               </div>
 
               <p className="text-xs text-slate-400 pt-2">

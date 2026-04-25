@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -7,6 +6,7 @@ import {
   LayoutList,
   ShieldCheck,
 } from "lucide-react";
+import { memo } from "react";
 
 const SuperAdminSideBar = () => {
   const navLinks = [
@@ -48,7 +48,7 @@ const SuperAdminSideBar = () => {
         fixed
         h-screen
         w-24 md:w-64
-        bg-gradient-to-b from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]
+        bg-linear-to-b from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]
         border-r border-[#eadfca]
         flex flex-col
         items-center
@@ -58,14 +58,18 @@ const SuperAdminSideBar = () => {
       "
     >
       {/* Brand */}
-      <div className="hidden md:flex flex-col items-center gap-3 mb-4">
-        <div className="w-12 h-12 rounded-2xl bg-[#fff7e6] flex items-center justify-center shadow-md">
-          <ShieldCheck className="w-6 h-6 text-[#b88917]" />
-        </div>
+      <div className="hidden md:flex flex-col items-center">
+        <img
+          src="/Elite_logo.png"
+          alt="Elite Logo"
+          className="w-25 h-25 object-cover rounded-full shadow-xl border border-[#eadfca]"
+        />
 
         <div className="text-center">
-          <h2 className="text-lg font-bold text-slate-900">Master Panel</h2>
-          <p className="text-xs text-slate-500 tracking-wide">
+          <h2 className="text-lg font-bold text-slate-900 tracking-wide">
+            Master Panel
+          </h2>
+          <p className="text-xs text-slate-500 uppercase tracking-[0.2em]">
             Super Admin
           </p>
         </div>
@@ -81,25 +85,24 @@ const SuperAdminSideBar = () => {
         {navLinks.map((link, index) => (
           <NavLink
             key={index}
-            to={link.path}
-            end={link.path === "/superAdmin"}
+            to={link?.path}
+            end={link?.path === "/superAdmin"}
             className={({ isActive }) =>
               `
               group flex items-center gap-3
               px-4 py-3 rounded-2xl
               transition-all duration-300
-              ${
-                isActive
-                  ? "bg-white text-[#b88917] shadow-md border border-[#eadfca]"
-                  : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
+              ${isActive
+                ? "bg-white text-[#b88917] shadow-md border border-[#eadfca]"
+                : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
               }
             `
             }
           >
-            <span className="shrink-0">{link.icon}</span>
+            <span className="shrink-0">{link?.icon}</span>
 
             <span className="hidden md:block text-sm font-semibold">
-              {link.name}
+              {link?.name}
             </span>
           </NavLink>
         ))}
@@ -108,4 +111,4 @@ const SuperAdminSideBar = () => {
   );
 };
 
-export default SuperAdminSideBar;
+export default memo(SuperAdminSideBar);

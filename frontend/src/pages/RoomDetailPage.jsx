@@ -165,20 +165,20 @@ const RoomDetails = () => {
           <p className="text-slate-600 leading-relaxed">{room?.description}</p>
 
           <div className="flex flex-col  ">
-            {roomCommonData.map((data, index) => (
+            {roomCommonData?.map((data, index) => (
               <div
                 key={index}
                 className="flex flex-row items-start space-x-3 py-3 "
               >
                 <img
-                  src={data.icon}
-                  alt={data.title}
+                  src={data?.icon}
+                  alt={data?.title}
                   loading="lazy"
                   className="w-6 h-6"
                 />
                 <div>
-                  <h3 className="font-semibold text-lg">{data.title}</h3>
-                  <p className="text-gray-600">{data.description}</p>
+                  <h3 className="font-semibold text-lg">{data?.title}</h3>
+                  <p className="text-gray-600">{data?.description}</p>
                 </div>
               </div>
             ))}

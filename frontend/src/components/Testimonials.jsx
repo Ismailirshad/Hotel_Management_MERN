@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-const NewsLetters = React.lazy(() => import("./NewsLetters.jsx"));
 import api from "../lib/axios.js";
-import { memo } from "react";
+const NewsLetters = React.lazy(() => import("./NewsLetters.jsx"));
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
@@ -67,8 +66,8 @@ const Testimonials = () => {
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="relative shrink-0">
                     <img
-                      src={item.hotel?.image}
-                      alt={item.hotel?.name || "Hotel"}
+                      src={item?.hotel?.image}
+                      alt={item?.hotel?.name || "Hotel"}
                       loading="lazy"
                       className="h-16 w-16 rounded-2xl object-cover ring-2 ring-white/10 shadow-lg"
                     />
@@ -79,9 +78,9 @@ const Testimonials = () => {
 
                   <div className="min-w-0">
                     <p className="truncate text-lg font-semibold text-white">
-                      {item.hotel?.name}
+                      {item?.hotel?.name}
                     </p>
-                    <p className="text-sm text-slate-400">{item.hotel.city}</p>
+                    <p className="text-sm text-slate-400">{item?.hotel?.city}</p>
                   </div>
                 </div>
               </div>
@@ -104,11 +103,10 @@ const Testimonials = () => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <span
                         key={star}
-                        className={`text-2xl drop-shadow-sm ${
-                          star <= item.rating
-                            ? "text-yellow-400"
-                            : "text-slate-600"
-                        }`}
+                        className={`text-2xl drop-shadow-sm ${star <= item.rating
+                          ? "text-yellow-400"
+                          : "text-slate-600"
+                          }`}
                       >
                         ★
                       </span>
@@ -120,13 +118,14 @@ const Testimonials = () => {
                 <div className="mt-0 flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="">
-                      <p className="h-12 w-12 pt-2 text-xl font-bold rounded-full object-cover ring-2 text-white text-center items-center justify-center ring-white/10">{(item.user?.name?.charAt(0).toUpperCase())}</p>
+                      <p className="h-12 w-12 pt-2 text-xl font-bold rounded-full object-cover ring-2 text-white text-center items-center justify-center ring-white/10">
+                        {item?.user?.name?.charAt(0).toUpperCase()}
+                      </p>
                     </div>
-                
 
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-white">
-                        {item.user?.name}
+                        {item?.user?.name}
                       </p>
                       <p className="text-sm text-emerald-300">Verified Guest</p>
                     </div>
@@ -137,7 +136,7 @@ const Testimonials = () => {
                       Rating
                     </p>
                     <p className="text-xl font-bold text-white">
-                      {item.rating}.0
+                      {item?.rating}.0
                     </p>
                   </div>
                 </div>
@@ -152,4 +151,4 @@ const Testimonials = () => {
   );
 };
 
-export default memo(Testimonials);
+export default Testimonials;

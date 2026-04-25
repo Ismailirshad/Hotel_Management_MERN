@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import User from '../schema/userSchema.js';
-
-dotenv.config();
 
 export const protectRoute = async (req, res, next) => {
     const {token} = req.cookies;
@@ -17,13 +14,13 @@ export const protectRoute = async (req, res, next) => {
         const user = await User.findById(tokenDecode.id).select('-password');
 
        if(!user){
-        return res.status(400).json({message: "user not found"})
+        return res.status(404).json({message: "user not found"})
        }
        req.user = user;
        next();
     } catch (error) {
         console.log("Error in authMiddleware", error.message)
-        return res.status(401).json({message: "Invalid or expired token"})
+        return res.status(403).json({message: "Invalid or expired token"})
     }
 }
 

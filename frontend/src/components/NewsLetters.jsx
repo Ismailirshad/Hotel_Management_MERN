@@ -54,6 +54,7 @@ const NewsLetters = () => {
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSendRequest()}
                 placeholder="Type your request here..."
                 className="flex-1 bg-transparent px-4 sm:px-6 py-3 text-white placeholder:text-white/60 outline-none min-w-0"
               />
@@ -67,6 +68,8 @@ const NewsLetters = () => {
               </button>
             </div>
           </div>
+
+          
         </div>
       </div>
     </div>

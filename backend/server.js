@@ -20,16 +20,13 @@ import requestMessageRoutes from "./routes/user/requestMessageRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 
 app.listen(PORT, "0.0.0.0", async () => {
   console.log("Server connected", PORT);
   await connectDb();
 });
 
-app.get("/", (req, res) => {
-  res.send("Backend working!");
-});
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
@@ -44,6 +41,9 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.get("/", (req, res) => {
+  res.send("Backend working!");
+});
 app.use("/api/auth", authRouter);
 app.use("/api/hotel", hotelRouter);
 app.use("/api/room", roomRouter);

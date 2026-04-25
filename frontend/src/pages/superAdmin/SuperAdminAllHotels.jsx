@@ -24,7 +24,6 @@ const SuperAdminAllHotels = () => {
       const res = await api.get("/superAdmin/allHotels");
       setHotels(res.data);
       setFilteredHotels(res.data);
-      console.log("Fetched hotels:", res.data);
     } catch (error) {
       console.error("Error fetching hotels:", error);
     } finally {
@@ -136,8 +135,8 @@ const SuperAdminAllHotels = () => {
               {/* Image */}
               <div className="h-52 w-full overflow-hidden">
                 <img
-                  src={hotel.image}
-                  alt={hotel.name}
+                  src={hotel?.image}
+                  alt={hotel?.name}
                   className="w-full h-full object-cover hover:scale-105 transition duration-500"
                 />
               </div>
@@ -146,36 +145,36 @@ const SuperAdminAllHotels = () => {
               <div className="p-5">
                 <div className="flex items-start justify-between gap-2">
                   <h2 className="text-xl font-bold text-[#1e1e1e]">
-                    {hotel.name}
+                    {hotel?.name}
                   </h2>
 
                   <div className="bg-[#fff7e8] text-[#c49b3f] px-2 py-1 rounded-xl text-sm font-semibold flex items-center gap-1">
                     <Star size={14} fill="currentColor" />
-                    {hotel.rating.toFixed(1) || 0}
+                    {hotel?.rating?.toFixed(1) || 0}
                   </div>
                 </div>
 
                 <div className="mt-3 space-y-2 text-sm text-gray-600">
                   <p className="flex items-center gap-2">
                     <MapPin size={15} className="text-[#c49b3f]" />
-                    {hotel.city}, {hotel.address}
+                    {hotel?.city}, {hotel?.address}
                   </p>
 
                   <p className="flex items-center gap-2">
                     <Phone size={15} className="text-[#c49b3f]" />
-                    {hotel.contact}
+                    {hotel?.contact}
                   </p>
 
                   <p className="flex items-center gap-2">
                     <Hotel size={15} className="text-[#c49b3f]" />
-                    {hotel.ratingCount} Reviews
+                    {hotel?.ratingCount} Reviews
                   </p>
                 </div>
 
                 {/* Footer */}
                 <div className="mt-5 flex justify-between items-center">
                   <span className="text-xs text-gray-400">
-                    Added {new Date(hotel.createdAt).toLocaleDateString()}
+                    Added {new Date(hotel?.createdAt).toLocaleDateString()}
                   </span>
 
                   <div className="px-4 py-4 text-center">
@@ -183,7 +182,7 @@ const SuperAdminAllHotels = () => {
                       <input
                         type="checkbox"
                         className="sr-only peer"
-                        checked={hotel.is_hotelAvailable}
+                        checked={hotel?.is_hotelAvailable}
                         onChange={() => toggleHotel(hotel._id)}
                       />
                       <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-emerald-500 transition-colors"></div>

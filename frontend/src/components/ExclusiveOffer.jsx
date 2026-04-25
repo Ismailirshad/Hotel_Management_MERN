@@ -1,11 +1,12 @@
-import { useEffect } from "react";
-import { memo } from "react";
+import { useEffect, memo } from "react";
+import { BadgePercent, Gift, Sparkles } from "lucide-react";
 import { offerStore } from "../store/useOfferStore.js";
 import ExclusiveOfferSkeleton from "./skeletones/ExclusiveOfferSkeleton.jsx";
-import { BadgePercent, Gift, Sparkles } from "lucide-react";
 
 const ExclusiveOffer = () => {
-  const { fetchAllOffers, offers, loading } = offerStore();
+  const fetchAllOffers = offerStore((state) => state.fetchAllOffers);
+  const offers = offerStore((state) => state.offers);
+  const loading = offerStore((state) => state.loading);
 
   useEffect(() => {
     fetchAllOffers();
@@ -44,8 +45,7 @@ const ExclusiveOffer = () => {
             <span className="absolute inset-0 rounded-full ring-2 ring-amber-400/40 opacity-0 group-hover:opacity-100 transition" />
           </button>
         </div>
-        {/* {!offers || offers.length === 0} && ( */}
-        {/* { */}
+
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl px-8 py-16 text-center">
           {/* Glow Background */}
           <div className="absolute inset-0 bg-linear-to-br from-amber-400/10 via-transparent to-cyan-400/5 pointer-events-none" />
@@ -82,16 +82,16 @@ const ExclusiveOffer = () => {
                       : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
                 }`}
               >
-                {offers.map((offer, index) => (
+                {offers.map((offer) => (
                   <div
-                    key={index}
+                    key={offer._id}
                     className="group relative w-full overflow-hidden rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl hover:shadow-amber-500/10 transition-all duration-500"
                   >
                     {/* Image */}
                     <div className="overflow-hidden">
                       <img
                         src={offer?.hotel?.image}
-                        alt={offer.title}
+                        alt={offer?.title}
                         loading="lazy"
                         className="h-56 sm:h-64 w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
@@ -103,16 +103,16 @@ const ExclusiveOffer = () => {
                     {/* Content */}
                     <div className="absolute bottom-0 p-6 space-y-2 w-full">
                       <h2 className="text-white text-xl font-bold">
-                        {offer.title}
+                        {offer?.title}
                       </h2>
 
                       <p className="text-slate-300 text-sm line-clamp-2">
-                        {offer.description}
+                        {offer?.description}
                       </p>
 
                       <div className="flex items-center justify-between pt-2 flex-wrap gap-2">
                         <span className="text-amber-400 font-semibold text-xl">
-                          {offer.hotel.name}
+                          {offer?.hotel?.name}
                         </span>
 
                         <span className="text-xs text-slate-400">
@@ -120,14 +120,14 @@ const ExclusiveOffer = () => {
 
                           Expires:{" "}
                           </span>
-                          {new Date(offer.expiryDate).toLocaleDateString("en-GB")}
+                          {new Date(offer?.expiryDate).toLocaleDateString("en-GB")}
                         </span>
                       </div>
                     </div>
 
                     {/* Discount Badge */}
                     <div className="absolute top-4 left-4 bg-amber-400 text-black px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                      {offer.priceOff}% OFF
+                      {offer?.priceOff}% OFF
                     </div>
                   </div>
                 ))}

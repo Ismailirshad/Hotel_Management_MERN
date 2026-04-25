@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { Link } from "react-router-dom";
+import { MapPin } from "lucide-react";
 import { hotelStore } from "../store/useHotelStore.js";
 import HotelCardsSkeleton from "./skeletones/HotelCardSkeleton";
-import { MapPin } from "lucide-react";
-import { memo } from "react";
 
 const HotelCards = () => {
-  const { featuredHotels, hotels, loading } = hotelStore();
+  const featuredHotels = hotelStore((state) => state.featuredHotels);
+  const hotels = hotelStore((state) => state.hotels);
+  const loading = hotelStore((state) => state.loading);
 
   useEffect(() => {
     featuredHotels();
-  }, []);
+  }, [featuredHotels]);
 
   if (loading) {
     return <HotelCardsSkeleton />;
@@ -51,8 +52,8 @@ const HotelCards = () => {
                 {/* IMAGE */}
                 <div className="relative h-52 overflow-hidden">
                   <img
-                    src={hotel.image}
-                    alt={hotel.name}
+                    src={hotel?.image}
+                    alt={hotel?.name}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -64,12 +65,12 @@ const HotelCards = () => {
                   {/* TITLE */}
                   <div>
                     <h3 className="text-lg font-semibold text-white group-hover:text-amber-400 transition">
-                      {hotel.name}
+                      {hotel?.name}
                     </h3>
 
                     <p className="text-sm text-slate-400 flex items-center gap-1 mt-1">
                       <MapPin className="w-4 h-4 text-amber-400" />
-                      {hotel.city}
+                      {hotel?.city}
                     </p>
                   </div>
 
@@ -79,7 +80,7 @@ const HotelCards = () => {
                       <span
                         key={star}
                         className={
-                          star <= hotel.rating
+                          star <= hotel?.rating
                             ? "text-amber-400"
                             : "text-slate-600"
                         }
@@ -92,7 +93,7 @@ const HotelCards = () => {
                   {/* PRICE */}
                   <div className="flex items-center justify-between pt-3 border-t border-white/10">
                     <p className="text-white font-semibold">
-                      ₹{hotel.startingPrice}
+                      ₹{hotel?.startingPrice}
                       <span className="text-sm text-slate-400"> / night</span>
                     </p>
 

@@ -43,15 +43,14 @@ authRouter.get(
     // Option 1: Send token as cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // change to true in production
-      sameSite: "Lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     // Option 2 (or both): Redirect with token in URL (not preferred for security)
-    res.redirect("http://localhost:5173");
+    res.redirect(process.env.CLIENT_URL);
   },
 );
-
 
 export default authRouter;

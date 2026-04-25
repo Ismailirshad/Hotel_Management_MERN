@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useUserStore } from "../../store/useUserStore.js";
 
 const LoginModal = ({ setShowModal, openForgot }) => {
-  const { signup, login, loading } = useUserStore();
   const [formType, setFormType] = useState("login");
-
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+  const signup = useUserStore((state) => state.signup);
+  const login = useUserStore((state) => state.login);
+  const loading = useUserStore((state) => state.loading);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
@@ -28,7 +30,7 @@ const LoginModal = ({ setShowModal, openForgot }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:4000/api/auth/google";
+    window.location.href = import.meta.env.VITE_API_URL;
   };
 
   return (

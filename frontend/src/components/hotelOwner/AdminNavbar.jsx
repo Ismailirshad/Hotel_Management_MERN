@@ -18,9 +18,12 @@ import { useUserStore } from "../../store/useUserStore.js";
 
 const AdminNavbar = ({ toggleSidebar, openSideBar }) => {
   const location = useLocation();
-  const { hotel } = hotelStore();
-  const { user, logout } = useUserStore();
   const navigate = useNavigate()
+
+  const hotel = hotelStore((state) => state.hotel);
+
+  const user = useUserStore((state) => state.user);
+  const logout = useUserStore((state) => state.logout);
 
   const navItems = [
     {
@@ -84,16 +87,16 @@ const AdminNavbar = ({ toggleSidebar, openSideBar }) => {
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <Link
-                key={item.name}
-                to={item.path}
-                title={item.name}
+                key={item?.name}
+                to={item?.path}
+                title={item?.name}
                 className={`p-2.5 rounded-xl transition-all duration-200 ${
-                  isActive(item.path)
+                  isActive(item?.path)
                     ? "bg-cyan-500/10 text-cyan-400"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                {item.icon}
+                {item?.icon}
               </Link>
             ))}
           </div>
@@ -129,7 +132,7 @@ const AdminNavbar = ({ toggleSidebar, openSideBar }) => {
                 </p>
               </div>
 
-              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-500 p-[1px]">
+              <div className="h-10 w-10 rounded-full bg-linear-to-tr from-cyan-500 to-blue-500 p-px">
                 <div className="h-full w-full rounded-full bg-[#0f1220] overflow-hidden">
                   <img
                     src={hotel?.image}

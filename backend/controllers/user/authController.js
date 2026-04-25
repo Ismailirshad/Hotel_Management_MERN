@@ -8,6 +8,47 @@ import OtpTemplate from "../../email/forgotPassword.js";
 export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ messsage: "Password must be at least 6 characters" });
+    }
+
+    if (!name || name.trim().length < 3) {
+      return res
+        .status(400)
+        .json({ message: "Name must be at least 3 characters long" });
+    }
+
+    //check if emails are valid: regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // password validation : 1 uppercase, 1 lowercase, 1 number, 1 special character
+    if (!/[A-Z]/.test(password)) {
+      return res
+        .status(400)
+        .json({ message: "Password must contain at least 1 uppercase letter" });
+    }
+    if (!/[a-z]/.test(password)) {
+      return res
+        .status(400)
+        .json({ message: "Password must contain at least 1 lowercase letter" });
+    }
+    if (!/[0-9]/.test(password)) {
+      return res
+        .status(400)
+        .json({ message: "Password must contain at least 1 number" });
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=~`]/.test(password)) {
+      return res.status(400).json({
+        message: "Password must contain at least 1 special character",
+      });
+    }
+    
     const userExists = await User.findOne({ email });
     if (userExists)
       return res.status(500).json({ message: "User alreadt exits" });
@@ -123,7 +164,7 @@ export const verifyOtp = async (req, res) => {
     return res.status(400).json({ success: false, message: "Missing Details" });
   }
   try {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res
@@ -153,7 +194,7 @@ export const resetPassword = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(404)
@@ -171,6 +212,3 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
-
-

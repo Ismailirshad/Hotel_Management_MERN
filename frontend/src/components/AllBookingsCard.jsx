@@ -17,7 +17,7 @@ const AllBookingsCard = ({ booking }) => {
         <div className="flex items-center gap-2">
           <CalendarDays className="w-4 h-4 text-[#b88917]" />
           <span className="font-medium">
-            {new Date(booking.createdAt).toLocaleDateString("en-GB")}
+            {new Date(booking?.createdAt).toLocaleDateString("en-GB")}
           </span>
         </div>
       </td>
@@ -72,7 +72,7 @@ const AllBookingsCard = ({ booking }) => {
       <td className="px-6 py-4">
         <div className="inline-flex items-center gap-1 font-semibold text-emerald-600">
           <IndianRupee className="w-4 h-4" />
-          {booking.totalPrice.toLocaleString()}
+          {booking?.totalPrice?.toLocaleString()}
         </div>
       </td>
 

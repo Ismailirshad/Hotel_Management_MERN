@@ -95,19 +95,19 @@ const SuperAdminListRoom = () => {
                     className="border-b border-[#f2ead9] hover:bg-[#fdfaf4] transition"
                   >
                     <td className="px-4 py-4 font-semibold">
-                      #{room.roomNumber}
+                      #{room?.roomNumber}
                     </td>
 
-                    <td className="px-4 py-4">{room.roomType}</td>
+                    <td className="px-4 py-4">{room?.roomType}</td>
 
                     <td className="px-4 py-4 text-slate-500 max-w-xs">
-                      {room.amenities.join(", ")}
+                      {room?.amenities?.join(", ")}
                     </td>
 
                     <td className="px-4 py-4">
                       <div className="inline-flex items-center gap-1 font-semibold text-emerald-600">
                         <BadgeIndianRupee className="w-4 h-4" />
-                        {room.pricePerNight}
+                        {room?.pricePerNight}
                       </div>
                     </td>
 
@@ -115,17 +115,17 @@ const SuperAdminListRoom = () => {
                     <td className="px-4 py-4 text-center">
                       <span
                         className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
-                          room.isOccupied
+                          room?.isOccupied
                             ? "bg-amber-100 text-amber-700"
                             : "bg-slate-100 text-slate-600"
                         }`}
                       >
-                        {room.isOccupied ? (
+                        {room?.isOccupied ? (
                           <CircleX className="w-3.5 h-3.5" />
                         ) : (
                           <CircleCheck className="w-3.5 h-3.5" />
                         )}
-                        {room.isOccupied ? "Occupied" : "Vacant"}
+                        {room?.isOccupied ? "Occupied" : "Vacant"}
                       </span>
                     </td>
 
@@ -133,12 +133,12 @@ const SuperAdminListRoom = () => {
                     <td className="px-4 py-4 text-center">
                       <span
                         className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                          room.isAvailable
+                          room?.isAvailable
                             ? "bg-emerald-100 text-emerald-700"
                             : "bg-rose-100 text-rose-700"
                         }`}
                       >
-                        {room.isAvailable ? "Yes" : "No"}
+                        {room?.isAvailable ? "Yes" : "No"}
                       </span>
                     </td>
                   </tr>
@@ -178,7 +178,7 @@ const SuperAdminListRoom = () => {
             </button>
 
             {/* Current Page Badge */}
-            <div className="px-4 py-2 rounded-xl bg-[#b88917] text-white text-sm font-bold shadow-md min-w-[44px] text-center">
+            <div className="px-4 py-2 rounded-xl bg-[#b88917] text-white text-sm font-bold shadow-md min-w-11 text-center">
               {page}
             </div>
 

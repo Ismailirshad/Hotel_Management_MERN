@@ -7,5 +7,4 @@ const paymentRouter = express.Router();
 paymentRouter.post('/create/:bookingId',protectRoute, createPayment )
 paymentRouter.post("/verify-payment",protectRoute, verifyPayment);
 
-
 export default paymentRouter;

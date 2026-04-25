@@ -18,7 +18,6 @@ const SupportRequest = () => {
     try {
       const res = await api.get("/superAdmin/support-requests");
       setSupportRequests(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log("Error fetching support requests", error);
     } finally {
@@ -93,12 +92,12 @@ const SupportRequest = () => {
                 <div>
                   <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                     <User className="w-5 h-5 text-[#b88a1b]" />
-                    {request.user?.name}
+                    {request?.user?.name}
                   </h2>
 
                   <p className="text-slate-500 mt-2 flex items-center gap-2 text-sm">
                     <Mail className="w-4 h-4" />
-                    {request.user?.email}
+                    {request?.user?.email}
                   </p>
                 </div>
 
@@ -113,7 +112,7 @@ const SupportRequest = () => {
               <div className="bg-[#f8f5ef] rounded-2xl p-4 mb-5">
                 <p className="text-slate-700 flex gap-2 text-sm">
                   <MessageSquare className="w-4 h-4 mt-0.5 text-[#b88a1b]" />
-                  {request.message}
+                  {request?.message}
                 </p>
               </div>
 
@@ -121,7 +120,7 @@ const SupportRequest = () => {
               <div className="flex justify-between items-center">
                 <p className="text-sm text-slate-500 flex items-center gap-2">
                   <CalendarDays className="w-4 h-4" />
-                  {new Date(request.createdAt).toLocaleString()}
+                  {new Date(request?.createdAt).toLocaleString()}
                 </p>
 
                 {request.status === "open" && (

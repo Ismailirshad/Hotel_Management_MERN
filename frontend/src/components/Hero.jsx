@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import { assets } from "../assets/assets.js";
 import { Link, useNavigate } from "react-router-dom";
 import { roomStore } from "../store/useRoomStore.js";
-import { memo } from "react";
 
 const Hero = () => {
-  const { fetchAllRooms, rooms, loading } = roomStore();
+  const fetchAllRooms = roomStore((state) => state.fetchAllRooms);
+  const rooms = roomStore((state) => state.rooms);
+
   const [destination, setDestination] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAllRooms();
-  }, []);
+  }, [fetchAllRooms]);
 
-  const cities = [...new Set(rooms.map((room) => room.hotel.city))];
+  const cities = useMemo(() => [...new Set(rooms.map((room) => room.hotel.city))], [rooms]);
 
   const handleSearchCity = (e) => {
     e.preventDefault();
@@ -85,8 +86,8 @@ const Hero = () => {
                       {window.innerWidth < 400 ? "......" : "Where are you going?"}
                     </option>
 
-                    {cities.map((city, i) => (
-                      <option key={i} value={city}>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
                         {city}
                       </option>
                     ))}

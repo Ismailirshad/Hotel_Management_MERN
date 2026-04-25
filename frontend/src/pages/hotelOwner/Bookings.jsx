@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { bookingStore } from "../../store/useBookingStore";
-import { Calendar, User, Hash, Users } from "lucide-react"; // Optional: for icons
+import { Calendar, User, Hash, Users } from "lucide-react"; 
+import { bookingStore } from "../../store/useBookingStore.js";
 import TableSkeleton from "../../components/skeletones/TableSkeleton";
 import BookingsSkeleton from "../../components/skeletones/adminSkeleton/BookingsSkeleton";
 
@@ -16,7 +16,7 @@ const Bookings = () => {
 
   useEffect(() => {
     fetchAllBookings(1);
-  }, []);
+  }, [fetchAllBookings]);
 
   if (loading) {
     return (
@@ -62,7 +62,7 @@ const Bookings = () => {
                     >
                       <td className="px-6 py-4">
                         <span className="text-white font-medium">
-                          {new Date(booking.createdAt).toLocaleDateString(
+                          {new Date(booking?.createdAt).toLocaleDateString(
                             "en-GB",
                           )}
                         </span>
@@ -72,7 +72,7 @@ const Bookings = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
                           <span className="text-white font-medium">
-                            {booking.user?.name || "Guest"}
+                            {booking?.user?.name || "Guest"}
                           </span>
                           <span className="text-[10px] text-gray-500 font-mono mt-1">
                             #{booking._id.slice(-8).toUpperCase()}
@@ -84,10 +84,10 @@ const Bookings = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
                           <span className="text-gray-200">
-                            {booking.room?.roomType}
+                            {booking?.room?.roomType}
                           </span>
                           <span className="text-xs text-gray-500">
-                            Room: {booking.room?.roomNumber || "N/A"}
+                            Room: {booking?.room?.roomNumber || "N/A"}
                           </span>
                         </div>
                       </td>
@@ -97,13 +97,13 @@ const Bookings = () => {
                         <div className="flex flex-col text-xs">
                           <span className="text-emerald-400/80">
                             In:{" "}
-                            {new Date(booking.checkInDate).toLocaleDateString(
+                            {new Date(booking?.checkInDate).toLocaleDateString(
                               "en-GB",
                             )}
                           </span>
                           <span className="text-rose-400/80">
                             Out:{" "}
-                            {new Date(booking.checkOutDate).toLocaleDateString(
+                            {new Date(booking?.checkOutDate).toLocaleDateString(
                               "en-GB",
                             )}
                           </span>
@@ -113,7 +113,7 @@ const Bookings = () => {
                       {/* Guests Column */}
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-1">
-                          <span>{booking.guests}</span>
+                          <span>{booking?.guests}</span>
                           <span className="text-gray-600 text-xs">
                             Person(s)
                           </span>
@@ -122,7 +122,7 @@ const Bookings = () => {
 
                       {/* Amount Column */}
                       <td className="px-6 py-4 font-medium text-white">
-                        ₹{booking.totalPrice.toLocaleString()}
+                        ₹{booking?.totalPrice?.toLocaleString()}
                       </td>
 
                       {/* Status Column */}
@@ -130,13 +130,13 @@ const Bookings = () => {
                         <span
                           className={`px-3 py-1 text-[10px] uppercase tracking-widest rounded-full font-bold
                           ${
-                            booking.paymentStatus === "paid"
+                            booking?.paymentStatus === "paid"
                               ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                               : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                           }
                         `}
                         >
-                          {booking.paymentStatus === "paid"
+                          {booking?.paymentStatus === "paid"
                             ? "Confirmed"
                             : "Pending"}
                         </span>
@@ -181,7 +181,7 @@ const Bookings = () => {
             </button>
 
             {/* Current Page */}
-            <div className="px-4 py-2 rounded-xl bg-cyan-500 text-white text-sm font-bold shadow-lg min-w-[44px] text-center">
+            <div className="px-4 py-2 rounded-xl bg-cyan-500 text-white text-sm font-bold shadow-lg min-w-11 text-center">
               {page}
             </div>
 
@@ -199,6 +199,8 @@ const Bookings = () => {
             </button>
           </div>
         </div>
+
+        
       </div>
     </div>
   );

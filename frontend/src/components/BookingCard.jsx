@@ -1,30 +1,38 @@
-import { useState } from "react";
-import React from "react"
-import { bookingStore } from "../store/useBookingStore.js";
-import { useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { bookingStore } from "../store/useBookingStore.js";
 
 const BookingCard = ({ roomId }) => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
   const [checked, setChecked] = useState(false);
-  const {id} = useParams()
-  const { checkRoomAvailability, isRoomAvailable, loading, bookRoom, bookedRooms } = bookingStore();
+  const { id } = useParams()
 
-const navigate = useNavigate();
+  const checkRoomAvailability = bookingStore((state) => state.checkRoomAvailability);
+  const isRoomAvailable = bookingStore((state) => state.isRoomAvailable);
+  const loading = bookingStore((state) => state.loading);
+  const bookRoom = bookingStore((state) => state.bookRoom);
+
+  const navigate = useNavigate();
 
   const handleCheckAvailability = async () => {
-    if (!checkIn || !checkOut) return alert("Select dates");
+    if (!checkIn || !checkOut) return toast.error("Select dates");
     setChecked(true);
     await checkRoomAvailability(roomId, checkIn, checkOut);
   };
 
   const handleConfirmBooking = async () => {
-   const booking = await bookRoom(id,checkIn, checkOut, guests)
-   navigate(`/payment/${booking._id}`)
-     
-    console.log("Booking confirmed");
+    try {
+      const booking = await bookRoom(id, checkIn, checkOut, guests)
+      navigate(`/payment/${booking._id}`)
+
+      console.log("Booking confirmed");
+    } catch (error) {
+      console.error("Error confirming booking:", error);
+      toast.error(error?.response?.data?.message || "Failed to confirm booking");
+    }
   };
 
   return (
@@ -66,7 +74,7 @@ const navigate = useNavigate();
           min={1}
           max={4}
           value={guests}
-          onChange={(e) => setGuests(e.target.value)}
+          onChange={(e) => setGuests(Number(e.target.value))}
           className="w-full mt-1 border rounded-lg px-3 py-2"
         />
       </div>
@@ -94,7 +102,7 @@ const navigate = useNavigate();
       )}
 
       {/* Confirm booking */}
-      {isRoomAvailable === true && (
+      {checked && isRoomAvailable === true && (
         <button
           onClick={handleConfirmBooking}
           className="w-full bg-slate-900 hover:bg-slate-800 transition text-white py-3 rounded-xl font-semibold"

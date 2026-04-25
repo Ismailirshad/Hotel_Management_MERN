@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { assets } from "../../assets/assets";
 import { offerStore } from "../../store/useOfferStore.js";
 import api from "../../lib/axios.js";
@@ -15,13 +15,14 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { offer, fetchOffer } = offerStore();
+  const offer = offerStore((state) => state.offer);
+  const fetchOffer = offerStore((state) => state.fetchOffer);
+
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      console.log("useEffect triggered: Fetching data...");
       setLoading(true);
       try {
         const res = await api.get("/admin", { withCredentials: true });
@@ -35,7 +36,6 @@ const Dashboard = () => {
     fetchDashboardData();
     fetchOffer();
   }, []);
-  console.log("Dashboard Data", dashboardData);
 
   if (loading || !dashboardData) {
     return (
@@ -46,10 +46,10 @@ const Dashboard = () => {
   }
 
   const graphData = [
-    { name: "Bookings", value: dashboardData.totalBookings },
-    { name: "Rooms", value: dashboardData.availableRooms },
-    { name: "CheckIn", value: dashboardData.checkInGuests },
-    { name: "Reserved", value: dashboardData.reservedGuests },
+    { name: "Bookings", value: dashboardData?.totalBookings ?? 0 },
+    { name: "Rooms", value: dashboardData?.availableRooms ?? 0 },
+    { name: "CheckIn", value: dashboardData?.checkInGuests ?? 0 },
+    { name: "Reserved", value: dashboardData?.reservedGuests ?? 0 },
   ];
 
   return (
@@ -217,4 +217,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default memo(Dashboard);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Bell,
@@ -10,33 +10,37 @@ import {
   UserCircle2,
   X,
 } from "lucide-react";
-import { useUserStore } from "../../store/useUserStore.js";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useUserStore } from "../../store/useUserStore.js";
 
 const SuperAdminNavbar = ({ toggleSidebar, openSideBar }) => {
   const navigate = useNavigate();
-  const [search, setSearch]  = useState("")
-  const { user, logout } = useUserStore();
+  const [search, setSearch] = useState("")
+
+  const user = useUserStore((state) => state.user);
+  const logout = useUserStore((state) => state.logout);
 
   const handleSearch = () => {
     const value = search.toLowerCase().trim()
 
-    if(value.includes("hotel")){
+    if (!value) return toast.error("Please enter a search term")
+
+    if (value.includes("hotel")) {
       navigate("/superAdmin/superAdmin-allHotels")
     }
-    else if(value.includes("booking") || value.includes("all")){
+    else if (value.includes("booking") || value.includes("all")) {
       navigate("/superAdmin/superAdmin-bookings")
     }
-     else if(value.includes("accounting") || value.includes("erp")){
+    else if (value.includes("accounting") || value.includes("erp")) {
       navigate("/superAdmin/superAdmin-accountingModule")
     }
-     else if(value.includes("list") || value.includes("rooms")){
+    else if (value.includes("list") || value.includes("rooms")) {
       navigate("/superAdmin/superAdmin-listRoom")
     }
-     else if(value.includes("support") || value.includes("request")){
+    else if (value.includes("support") || value.includes("request")) {
       navigate("/superAdmin/superAdmin-supportRequests")
-    }else{
+    } else {
       toast.error("No matching found")
     }
   }
@@ -73,8 +77,8 @@ const SuperAdminNavbar = ({ toggleSidebar, openSideBar }) => {
                 placeholder="Search hotels, bookings..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={(e)=> {
-                  if(e.key === "Enter"){
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
                     handleSearch()
                   }
                 }}
@@ -129,4 +133,4 @@ const SuperAdminNavbar = ({ toggleSidebar, openSideBar }) => {
   );
 };
 
-export default SuperAdminNavbar;
+export default memo(SuperAdminNavbar);

@@ -16,6 +16,7 @@ export const submitRating = async (req, res) => {
   const { bookingId } = req.params;
   const { rating } = req.body;
   const userId = req.user._id;
+
   try {
     if (!rating || rating < 1 || rating > 5) {
       return res.status(400).json({ message: "Invalid rating value" });
@@ -26,12 +27,13 @@ export const submitRating = async (req, res) => {
       user: userId,
       status: "completed",
     });
-    console.log(booking,"hdjehdjeh");
+
     if (!booking) {
       return res.status(400).json({
         message: "You can only rate hotels you have completed bookings with.",
       });
     }
+
     if (booking.rating && booking.rating > 0)
       return res
         .status(400)
@@ -48,11 +50,11 @@ export const submitRating = async (req, res) => {
     // Recalculate average rating
     hotel.rating =
       (hotel.rating * hotel.ratingCount + rating) / (hotel.ratingCount + 1);
-      
+
     hotel.ratingCount += 1;
 
-    hotel.rating = Math.round(hotel.rating)
-    
+    hotel.rating = Math.round(hotel.rating);
+
     await hotel.save();
     res.status(200).json({ message: "Rating submitted successfully." });
   } catch (error) {
@@ -64,9 +66,6 @@ export const submitRating = async (req, res) => {
 export const featuredHotels = async (req, res) => {
   try {
     const hotels = await Hotel.aggregate([
-      // {
-      //   $match: { rating: { $gt: 4 }}
-      // },
       {
         $lookup: {
           from: "rooms",

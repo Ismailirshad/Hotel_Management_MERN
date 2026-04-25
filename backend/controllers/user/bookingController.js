@@ -186,7 +186,10 @@ export const getBookingById = async (req, res) => {
 export const getAllBookings = async (req, res) => {
   const userId = req.user._id;
   try {
-    const bookings = await Booking.find({ user: userId, status: { $in : ["completed"]} })
+    const bookings = await Booking.find({
+      user: userId,
+      status: { $in: ["booked", "completed"] },
+    })
       .populate("hotel")
       .populate("room")
       .sort({ createdAt: -1 });
@@ -222,10 +225,10 @@ export const getReviews = async (req, res) => {
       },
     ]);
 
-    const populatedReviews = await Booking.populate(reviews,[
-        {path: "user", select: "name"},
-        {path: "hotel", select: "image name city"}
-    ])
+    const populatedReviews = await Booking.populate(reviews, [
+      { path: "user", select: "name" },
+      { path: "hotel", select: "image name city" },
+    ]);
     res.json(populatedReviews);
   } catch (error) {
     console.log("Error in getReviews controller", error);

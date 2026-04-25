@@ -1,6 +1,7 @@
 import express from 'express';
 import { protectRoute, superAdminRoute } from '../../middleware/authMiddleware.js';
-import { superAdminAccountingExpense, superAdminAccountingSummary, superAdminAddExpense, superAdminAllBookings, superAdminAllHotels, superAdminAllRooms, superAdminDashBoard, superAdminResolveSupportRequestse, superAdminSupportRequests, superAdminToggleHotel } from '../../controllers/superAdmin/superAdminController.js';
+import { superAdminAccountingExpense, superAdminAccountingSummary, superAdminAddExpense, superAdminAllBookings, superAdminAllHotels, superAdminAllRooms, superAdminDashBoard,
+         superAdminResolveSupportRequestse, superAdminSupportRequests, superAdminToggleHotel } from '../../controllers/superAdmin/superAdminController.js';
 
 const superAdminRouter = express.Router()
 

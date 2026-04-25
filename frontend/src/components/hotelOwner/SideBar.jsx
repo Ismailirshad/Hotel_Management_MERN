@@ -7,6 +7,7 @@ import {
   Tag,
   LayoutList,
 } from "lucide-react";
+import { memo } from "react";
 
 const SideBar = () => {
   const navLinks = [
@@ -49,7 +50,14 @@ const SideBar = () => {
     "
     >
       {/* Brand / Title */}
-      <div className="hidden md:block text-xl font-semibold text-gray-200 tracking-wide mb-4">
+      <div className="hidden md:block text-xl font-semibold text-gray-200 tracking-wide">
+        <img
+          src="/Elite_logo.png"
+          alt="Elite Logo"
+          width={120}
+          height={120}
+          className="rounded-xl"
+        />
         Owner Panel
       </div>
 
@@ -58,24 +66,23 @@ const SideBar = () => {
         {navLinks.map((link, index) => (
           <NavLink
             key={index}
-            to={link.path}
-            end={link.path === "/owner"}
+            to={link?.path}
+            end={link?.path === "/owner"}
             className={({ isActive }) =>
               `
               flex items-center gap-3
               px-4 py-3 rounded-xl
               transition-all duration-200
-              ${
-                isActive
-                  ? "bg-emerald-500/10 text-emerald-400 shadow-inner"
-                  : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+              ${isActive
+                ? "bg-emerald-500/10 text-emerald-400 shadow-inner"
+                : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
               }
             `
             }
           >
-            {link.icon}
+            {link?.icon}
             <span className="hidden md:block text-sm font-medium">
-              {link.name}
+              {link?.name}
             </span>
           </NavLink>
         ))}
@@ -84,4 +91,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default memo(SideBar);

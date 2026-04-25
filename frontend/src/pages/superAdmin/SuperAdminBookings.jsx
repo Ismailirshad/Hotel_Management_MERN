@@ -125,7 +125,7 @@ const SuperAdminBookings = () => {
             </button>
 
             {/* Current Page Badge */}
-            <div className="px-4 py-2 rounded-xl bg-[#b88917] text-white text-sm font-bold shadow-md min-w-[44px] text-center">
+            <div className="px-4 py-2 rounded-xl bg-[#b88917] text-white text-sm font-bold shadow-md min-w-11 text-center">
               {page}
             </div>
 

@@ -4,13 +4,13 @@ import {
   HiOutlineOfficeBuilding,
   HiOutlineTicket,
   HiOutlineInformationCircle,
-} from "react-icons/hi"; // Using cleaner, outline icons
+} from "react-icons/hi";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { Link, useNavigate } from "react-router-dom";
+import { Shield } from "lucide-react";
 import { useUserStore } from "../store/useUserStore.js";
 const LoginModal = React.lazy(() => import("./auth/LoginModal.jsx"))
 const ForgotPasswordWrapper = React.lazy(() => import("./auth/ForgotPasswordWrapper.jsx"))
-import { Link, useNavigate } from "react-router-dom";
-import { Shield } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useUserStore();
@@ -24,6 +24,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       // Logic for hiding/showing
+      // if top value is 0 to 80 and if bottom value is 300
       setShowNavbar(window.scrollY < lastScroll || window.scrollY < 80);
       // Logic for background intensity
       setIsScrolled(window.scrollY > 20);
@@ -62,16 +63,17 @@ const Navbar = () => {
         >
           <div
             className={`
-            backdrop-blur-md transition-all duration-500 rounded-[2rem] 
+            backdrop-blur-md transition-all duration-500 rounded-4xl 
             ${isScrolled ? "" : "bg-white/80"}
           `}
           >
             <div className="flex items-center justify-between h-16 px-6 md:px-8">
               {/* LOGO */}
-              <div className="flex items-center gap-3 group cursor-pointer">
+
+              <Link to="/" className="flex items-center gap-3 group cursor-pointer">
                 <div className="relative">
                   <img
-                    src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=200"
+                    src="/Elite_logo.png"
                     alt="Logo"
                     loading="lazy"
                     className="h-10 w-10 rounded-full object-cover ring-2  ring-blue-500 transition-all duration-300"
@@ -79,42 +81,42 @@ const Navbar = () => {
                   <div className="absolute inset-0 rounded-full bg-emerald-500/10 animate-pulse group-hover:hidden" />
                 </div>
                 <span className="text-2xl font-black text-slate-900 tracking-tighter italic">
-                  Hotex<span className="text-emerald-600 not-italic">.</span>
+                  Elite<span className="text-emerald-600 not-italic">.</span>
                 </span>
-              </div>
+              </Link>
 
               {/* DESKTOP LINKS - Ultra Clean */}
               <div className="hidden lg:flex items-center gap-8">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.id}
-                    href={`#${link.id}`}
+                    to={`/#${link.id}`}
                     className="group flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors duration-300"
                   >
                     <span className="text-slate-400 group-hover:text-emerald-500 transition-colors">
-                      {link.icon}
+                      {link?.icon}
                     </span>
                     <span className="relative">
-                      {link.name}
-                      <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-emerald-500 transition-all duration-300 group-hover:w-full" />
+                      {link?.name}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 transition-all duration-300 group-hover:w-full" />
                     </span>
-                  </a>
+                  </Link>
                 ))}
               </div>
 
-               {/* MOBILE MENU TOGGLE */}
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-2 lg:hidden rounded-xl bg-slate-100 text-slate-900 hover:bg-slate-200 transition-colors"
-                >
-                  {isOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
-                </button>
+              {/* MOBILE MENU TOGGLE */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 lg:hidden rounded-xl bg-slate-100 text-slate-900 hover:bg-slate-200 transition-colors"
+              >
+                {isOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+              </button>
 
               {/* RIGHT ACTIONS */}
               <div className="flex items-center gap-3">
                 {user ? (
                   <button
-                    onClick={() => logout({navigate})}
+                    onClick={() => logout({ navigate })}
                     className="hidden md:block px-6 py-2.5 rounded-full bg-slate-900 text-white text-[13px] font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200"
                   >
                     Logout
@@ -128,7 +130,7 @@ const Navbar = () => {
                   </button>
                 )}
 
-               
+
 
                 {user && user.role === "admin" && (
                   <div className="flex flex-wrap gap-3">
@@ -146,8 +148,8 @@ const Navbar = () => {
                       to="/superAdmin"
                       className="px-2 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/40 border border-white/50 backdrop-blur-xl text-slate-800 text-xs sm:text-sm  font-semibold shadow-md hover:bg-white/60 hover:text-slate-900 transition-all duration-300"
                     >
-                       <Shield className="block lg:hidden" size={22} title={"Super Admin Dashboard"} />
-                     <p className="hidden lg:block">Super Admin Dashboard</p>
+                      <Shield className="block lg:hidden" size={22} title={"Super Admin Dashboard"} />
+                      <p className="hidden lg:block">Super Admin Dashboard</p>
                     </Link>
                   </div>
                 )}
@@ -156,74 +158,47 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* MOBILE MENU - Full Screen Overlay Style */}
-        {/* <div
-          className={`
-          absolute top-full left-4 right-4 mt-2 p-6 w-2/3 mx-auto bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-100 shadow-2xl transition-all duration-300 lg:hidden
-          ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10 pointer-events-none"}
-        `}
-        >
-          <div className="flex flex-col gap-5">
-            {navLinks.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-4 text-lg font-bold text-slate-800 hover:text-emerald-600 transition-all"
-              >
-                <div className="p-2 rounded-lg bg-slate-50 text-slate-400">
-                  {link.icon}
-                </div>
-                {link.name}
-              </a>
-            ))}
-            <hr className="border-slate-100" />
-            <button className="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold">
-              {user ? "Logout" : "Member Login"}
-            </button>
-          </div>
-        </div> */}
         {/* MOBILE MENU */}
-<div
-  className={`
+        <div
+          className={`
     absolute top-full left-4 right-4 mt-3 z-50
     lg:hidden transition-all duration-300
     ${isOpen
-      ? "opacity-100 translate-y-0"
-      : "opacity-0 -translate-y-5 pointer-events-none"}
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-5 pointer-events-none"}
   `}
->
-  <div className="mx-auto w-full max-w-sm rounded-3xl border border-white/40 bg-white/85 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-4">
-    
-    {/* Nav Links */}
-    <div className="space-y-2">
-      {navLinks.map((link) => (
-        <a
-          key={link.id}
-          href={`#${link.id}`}
-          onClick={() => setIsOpen(false)}
-          className="group flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all"
         >
-          <div className="p-2 rounded-xl bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600 transition">
-            {link.icon}
+          <div className="mx-auto w-full max-w-sm rounded-3xl border border-white/40 bg-white/85 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-4">
+
+            {/* Nav Links */}
+            <div className="space-y-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link?.id}
+                  to={`/#${link?.id}`}
+                  onClick={() => setIsOpen(false)}
+                  className="group flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all"
+                >
+                  <div className="p-2 rounded-xl bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600 transition">
+                    {link?.icon}
+                  </div>
+
+                  <span>{link?.name}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div className="my-4 border-t border-slate-200" />
+
+            {/* Action Button */}
+            <button
+              className="w-full py-3 rounded-2xl bg-linear-to-r from-emerald-500 to-emerald-600 text-white font-semibold shadow-lg hover:scale-[1.02] transition-all"
+            >
+              {user ? "Logout" : "Member Login"}
+            </button>
           </div>
-
-          <span>{link.name}</span>
-        </a>
-      ))}
-    </div>
-
-    {/* Divider */}
-    <div className="my-4 border-t border-slate-200" />
-
-    {/* Action Button */}
-    <button
-      className="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold shadow-lg hover:scale-[1.02] transition-all"
-    >
-      {user ? "Logout" : "Member Login"}
-    </button>
-  </div>
-</div>
+        </div>
       </nav>
 
       {/* MODALS */}

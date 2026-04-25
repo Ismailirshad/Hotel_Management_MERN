@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email"],
       required: [true, "Email is required"],
       unique: true,
       trim: true,
@@ -19,7 +20,7 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return !this.googleId; // If logging in with Google, password is not required
       },
-      trim: true,
+      select: false, // Exclude password from query results by default
     },
     googleId: {
       type: String,
@@ -41,14 +42,13 @@ const userSchema = new mongoose.Schema(
       },
     ],
     resetOtp: {
-        type: String,
-        default: null,
-
+      type: String,
+      default: null,
     },
     resetOtpExpires: {
-        type: Date,
-        default: null,
-    }
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true },
 );

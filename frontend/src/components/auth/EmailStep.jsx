@@ -1,25 +1,25 @@
 import toast from "react-hot-toast";
 import api from "../../lib/axios.js";
 
-const EmailStep = ({setStep, setLoading , email ,setEmail, loading}) => {
+const EmailStep = ({ setStep, setLoading, email, setEmail, loading }) => {
 
-     const handleSendOtp = async () => {
-        setLoading(true);
-        try {
-          await api.post("/auth/sendOtp", { email }, { withCredentials: true });
-          toast.success("OTP sent to your email");
-          setStep("otp");
-        } catch (error) {
-          toast.error(error.response?.data?.message || "Failed to send OTP");
-        } finally {
-          setLoading(false);
-        }
-      };
+  const handleSendOtp = async () => {
+    setLoading(true);
+    try {
+      await api.post("/auth/sendOtp", { email }, { withCredentials: true });
+      toast.success("OTP sent to your email");
+      setStep("otp");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-200">
+        <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-cyan-200">
           Forgot Password
         </h2>
         <p className="text-gray-400 text-sm mt-1">
@@ -75,7 +75,7 @@ const EmailStep = ({setStep, setLoading , email ,setEmail, loading}) => {
         </span>
 
         {/* Shine effect on hover */}
-        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white/10 opacity-40 group-hover:animate-shine" />
+        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-linear-to-r from-transparent to-white/10 opacity-40 group-hover:animate-shine" />
       </button>
     </>
   );

@@ -15,17 +15,13 @@ const AllRooms = () => {
   const [seletedeRoomTypes, setSelectedRoomTypes] = useState([]);
   const [selectedPriceRange, setSelectedPriceRange] = useState("null");
   const [selectedSort, setSelectedSort] = useState("null");
-  const [selectedCity, setSelectedCity] = useState("");
-
+  
   const { id } = useParams();
-
+  
   const [queryCity] = useSearchParams();
-  const city = queryCity.get("city");
-  useEffect(() => {
-    if (city) {
-      setSelectedCity(city);
-    }
-  }, [city]);
+  const city = queryCity.get("city") || "";
+  const [selectedCity, setSelectedCity] = useState(city);
+
 
   const roomTypes = ["Single Bed", "Double Bed", "Suite", "Deluxe"];
   const priceRanges = ["$50 - $150", "$151 - $300", "$301 - $500", "$501+"];
@@ -40,7 +36,7 @@ const AllRooms = () => {
     window.scrollTo(0, 0);
 
     fetchAllRooms();
-  }, []);
+  }, [fetchAllRooms]);
 
   //   cities for filter dropdown
   const cities = useMemo(
@@ -176,7 +172,7 @@ const AllRooms = () => {
   return (
     <section className="bg-slate-50 min-h-screen pt-24">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* ================= FILTER PANEL (DESKTOP) ================= */}
+        {/* Filter For Desktop  */}
         <aside className="hidden lg:block bg-white rounded-2xl shadow-sm p-6 h-fit sticky top-23">
           <h2 className="text-xl font-semibold text-slate-800 mb-6">Filters</h2>
 
@@ -255,7 +251,7 @@ const AllRooms = () => {
           </div>
         </aside>
 
-        {/* ================= ROOM LIST ================= */}
+     {/* Room Cards Section */}
         <main className="lg:col-span-3 space-y-6">
           {/* HEADER */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

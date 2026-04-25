@@ -17,7 +17,7 @@ const OtpTemplate = (otp) => {
           </p>
         </div>
         <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">Hotex Management System &copy; 2026</p>
+          <p style="color: #9ca3af; font-size: 12px; margin: 0;">Elite Management System &copy; 2026</p>
         </div>
       </div>
     </div>

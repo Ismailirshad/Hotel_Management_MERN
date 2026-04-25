@@ -87,7 +87,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Total Hotels</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                {dashboardData.totalHotels}
+                {dashboardData?.totalHotels}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -102,7 +102,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Total Bookings</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                {dashboardData.totalBookings}
+                {dashboardData?.totalBookings}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -117,7 +117,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Total Revenue</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                ₹{dashboardData.totalRevenue}
+                ₹{dashboardData?.totalRevenue}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -132,7 +132,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Check-In Guests</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                {dashboardData.checkInGuests}
+                {dashboardData?.checkInGuests}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -147,7 +147,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Reserved Guests</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                {dashboardData.reservedGuests}
+                {dashboardData?.reservedGuests}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">
@@ -162,7 +162,7 @@ const SuperAdminDashboard = () => {
             <div>
               <p className="text-sm text-slate-500">Available Rooms</p>
               <p className="text-3xl font-bold text-slate-900 mt-2">
-                {dashboardData.availableRooms}
+                {dashboardData?.availableRooms}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-300/50">

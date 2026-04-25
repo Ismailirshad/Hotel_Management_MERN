@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import api from "../../lib/axios.js";
+import React, { memo, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import api from "../../lib/axios.js";
 import ListRoomSkeleton from "../../components/skeletones/adminSkeleton/ListRoomSkeleton.jsx";
 
 const ListRoom = () => {
@@ -21,7 +21,6 @@ const ListRoom = () => {
         setRooms(res.data.availableRooms);
         setTotalPages(res.data.totalPages);
         setLoading(false);
-        console.log("All Rooms Data", res.data);
       } catch (error) {
         setLoading(false);
         console.error("Error fetching rooms:", error);
@@ -30,19 +29,29 @@ const ListRoom = () => {
     fetchRooms();
   }, [page]);
 
-  const toggleRoom = async (roomId) => {
+  const toggleRoom = useCallback(async (roomId) => {
     try {
-      const res = await api.patch(`/admin/toggleRoom/${roomId}`, {
-        withCredentials: true,
-      });
-      console.log("Toggle Room Response", res.data);
+      await api.patch(
+        `/admin/toggleRoom/${roomId}`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
       // fetchRooms();
+      setRooms((prev) =>
+        prev.map((room) =>
+          room._id === roomId
+            ? { ...room, isAvailable: !room.isAvailable }
+            : room,
+        ),
+      );
       toast.success("Room availability updated");
     } catch (error) {
       console.log("Error in toggling room availability", error);
       toast.error("Error in toggling room availability");
     }
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -80,30 +89,30 @@ const ListRoom = () => {
             </thead>
 
             <tbody>
-              {rooms?.map((room, index) => (
+              {rooms?.map((room) => (
                 <tr
-                  key={index}
+                  key={room._id}
                   className="border-b border-white/5 hover:bg-white/5 transition"
                 >
-                  <td className="px-4 py-4 font-medium">{room.roomNumber}</td>
+                  <td className="px-4 py-4 font-medium">{room?.roomNumber}</td>
 
-                  <td className="px-4 py-4">{room.roomType}</td>
+                  <td className="px-4 py-4">{room?.roomType}</td>
 
                   <td className="px-4 py-4 text-gray-400">
-                    {room.amenities.join(", ")}
+                    {room?.amenities?.join(", ")}
                   </td>
 
                   <td className="px-4 py-4 font-semibold text-emerald-400">
-                    ₹{room.pricePerNight}
+                    ₹{room?.pricePerNight}
                   </td>
 
                   {/* Occupied toggle */}
                   <td className="px-4 py-4 text-center">
                     <div
                       className={`inline-block px-3 py-1 rounded-full text-xs font-medium 
-                      ${room.isOccupied ? "bg-yellow-500 text-white" : "bg-gray-500 text-white"}`}
+                      ${room?.isOccupied ? "bg-yellow-500 text-white" : "bg-gray-500 text-white"}`}
                     >
-                      {room.isOccupied ? "Occupied" : "Vacant"}
+                      {room?.isOccupied ? "Occupied" : "Vacant"}
                     </div>
                   </td>
 
@@ -113,7 +122,7 @@ const ListRoom = () => {
                       <input
                         type="checkbox"
                         className="sr-only peer"
-                        checked={room.isAvailable}
+                        checked={room?.isAvailable}
                         onChange={() => toggleRoom(room._id)}
                         readOnly
                       />
@@ -157,7 +166,7 @@ const ListRoom = () => {
             </button>
 
             {/* Current Page */}
-            <div className="px-4 py-2 rounded-xl bg-cyan-500 text-white text-sm font-bold shadow-lg min-w-[44px] text-center">
+            <div className="px-4 py-2 rounded-xl bg-cyan-500 text-white text-sm font-bold shadow-lg min-w-11 text-center">
               {page}
             </div>
 
@@ -175,9 +184,11 @@ const ListRoom = () => {
             </button>
           </div>
         </div>
+
+        
       </div>
     </div>
   );
 };
 
-export default ListRoom;
+export default memo(ListRoom);

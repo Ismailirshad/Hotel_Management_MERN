@@ -10,8 +10,8 @@ const RoomCard = ({ room }) => {
           {/* IMAGE */}
           <div className="w-full md:w-40 h-48 md:h-32 rounded-xl overflow-hidden shrink-0">
             <img
-              src={room.images[0]}
-              alt={room.roomType}
+              src={room?.images?.[0]}
+              alt={room?.roomType}
               loading="lazy"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
             />
@@ -20,11 +20,11 @@ const RoomCard = ({ room }) => {
           {/* INFO */}
           <div className="flex-1 space-y-2 text-left">
             <h2 className="text-xl font-semibold text-slate-900">
-              {room.roomType}
+              {room?.roomType}
             </h2>
 
             <p className="text-sm text-slate-500">
-              📍 {room.hotel.city} · {room.hotel.name}
+              📍 {room?.hotel?.city} · {room?.hotel?.name}
             </p>
 
             {/* Rating */}
@@ -33,7 +33,7 @@ const RoomCard = ({ room }) => {
                 <span
                   key={star}
                   className={
-                    star <= room.hotel.rating
+                    star <= room?.hotel?.rating
                       ? "text-amber-400"
                       : "text-slate-300"
                   }
@@ -42,13 +42,13 @@ const RoomCard = ({ room }) => {
                 </span>
               ))}
               <span className="text-slate-500 ml-2">
-                {room.hotel.ratingCount}+ reviews
+                {room?.hotel?.ratingCount}+ reviews
               </span>
             </div>
 
             {/* Amenities */}
             <div className="flex flex-wrap gap-2 pt-1">
-              {room.amenities.slice(0, 3).map((item, idx) => (
+              {room?.amenities?.slice(0, 3).map((item, idx) => (
                 <span
                   key={idx}
                   className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600"
@@ -62,7 +62,7 @@ const RoomCard = ({ room }) => {
           {/* PRICE */}
           <div className="border-t md:border-t-0 md:border-l border-slate-200 pt-4 md:pt-0 md:pl-4 flex flex-col justify-center items-start md:items-end gap-2">
             <p className="text-2xl font-bold text-slate-900">
-              ₹{room.pricePerNight}
+              ₹{room?.pricePerNight}
             </p>
 
             <span className="text-sm text-slate-500">per night</span>

@@ -1,6 +1,6 @@
 import React from "react";
-import api from "../../lib/axios.js";
 import toast from "react-hot-toast";
+import api from "../../lib/axios.js";
 
 const ResetPasswordStep = ({
   loading,
@@ -33,7 +33,7 @@ const ResetPasswordStep = ({
   return (
     <>
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-200">
+        <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-cyan-200">
           Reset Password
         </h2>
         <p className="text-gray-400 text-sm mt-1">
@@ -70,7 +70,7 @@ const ResetPasswordStep = ({
       <button
         onClick={handleResetPassword}
         disabled={loading}
-        className="cursor-pointer relative w-full overflow-hidden group bg-gradient-to-br from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold py-3 rounded-xl transition-all duration-300 active:scale-[0.98] shadow-lg shadow-emerald-900/20"
+        className="cursor-pointer relative w-full overflow-hidden group bg-linear-to-br from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold py-3 rounded-xl transition-all duration-300 active:scale-[0.98] shadow-lg shadow-emerald-900/20"
       >
         <span className="relative z-10 flex items-center justify-center gap-2">
           {loading ? (
@@ -83,7 +83,7 @@ const ResetPasswordStep = ({
           )}
         </span>
         {/* High-intensity Shine */}
-        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white/20 opacity-50 group-hover:animate-shine" />
+        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-linear-to-r from-transparent to-white/20 opacity-50 group-hover:animate-shine" />
       </button>
     </>
   );
