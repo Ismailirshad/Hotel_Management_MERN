@@ -28,7 +28,6 @@ const BookingCard = ({ roomId }) => {
       const booking = await bookRoom(id, checkIn, checkOut, guests)
       navigate(`/payment/${booking._id}`)
 
-      console.log("Booking confirmed");
     } catch (error) {
       console.error("Error confirming booking:", error);
       toast.error(error?.response?.data?.message || "Failed to confirm booking");

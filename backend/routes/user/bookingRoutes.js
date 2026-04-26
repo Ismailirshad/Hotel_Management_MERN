@@ -6,7 +6,7 @@ const bookingRouter = express.Router();
 
 bookingRouter.get('/my-bookings', protectRoute, getAllBookings)
 bookingRouter.get('/reviews', getReviews)
-bookingRouter.get('/check/:roomId', protectRoute, isRoomAvailable)
+bookingRouter.get('/check/:roomId', isRoomAvailable)
 bookingRouter.get('/:bookingId', protectRoute, getBookingById)
 bookingRouter.post('/checkout/:roomId', protectRoute, checkout )
 
