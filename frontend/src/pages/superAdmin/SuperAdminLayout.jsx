@@ -15,7 +15,7 @@ const SuperAdminLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]">
+    <div className="min-h-screen overflow-x-hidden bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]">
       <SuperAdminNavbar
         toggleSidebar={toggleSidebar}
         openSideBar={openSideBar}
@@ -42,13 +42,13 @@ const SuperAdminLayout = () => {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 w-full pt-6 px-4 sm:px-6 lg:px-10 lg:ml-64">
+        <main className="flex-1 min-w-0 pt-6 px-4 sm:px-6 lg:px-10 lg:ml-64 overflow-x-hidden">
           <div className="max-w-[1600px] mx-auto pb-8">
             <Outlet />
           </div>
         </main>
 
-        
+
       </div>
     </div>
   );

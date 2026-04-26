@@ -6,8 +6,8 @@ import {
   HiOutlineInformationCircle,
 } from "react-icons/hi";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
-import { Shield } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Home, Shield } from "lucide-react";
 import { useUserStore } from "../store/useUserStore.js";
 const LoginModal = React.lazy(() => import("./auth/LoginModal.jsx"))
 const ForgotPasswordWrapper = React.lazy(() => import("./auth/ForgotPasswordWrapper.jsx"))
@@ -20,6 +20,9 @@ const Navbar = () => {
   const [lastScroll, setLastScroll] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,44 +90,48 @@ const Navbar = () => {
 
               {/* DESKTOP LINKS - Ultra Clean */}
               <div className="hidden lg:flex items-center gap-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.id}
-                    to={`/#${link.id}`}
-                    className="group flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors duration-300"
-                  >
-                    <span className="text-slate-400 group-hover:text-emerald-500 transition-colors">
-                      {link?.icon}
-                    </span>
-                    <span className="relative">
-                      {link?.name}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 transition-all duration-300 group-hover:w-full" />
-                    </span>
-                  </Link>
-                ))}
+                {isHomePage && (
+                  navLinks.map((link) => (
+                    <a
+                      key={link.id}
+                      href={`#${link.id}`}
+                      className="group flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-600 transition"
+                    >
+                      {link.icon}
+                      <span>{link.name}</span>
+                    </a>
+                  ))
+                )}
               </div>
 
               {/* MOBILE MENU TOGGLE */}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 lg:hidden rounded-xl bg-slate-100 text-slate-900 hover:bg-slate-200 transition-colors"
-              >
-                {isOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
-              </button>
+              {isHomePage && (
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="p-2 lg:hidden rounded-xl bg-slate-100 text-slate-900 hover:bg-slate-200 transition-colors"
+                >
+                  {isOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+                </button>
+              )}
 
               {/* RIGHT ACTIONS */}
               <div className="flex items-center gap-3">
                 {user ? (
                   <button
                     onClick={() => logout({ navigate })}
-                    className="hidden md:block px-6 py-2.5 rounded-full bg-slate-900 text-white text-[13px] font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200"
+                    className={`px-4 py-2 rounded-full bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-all active:scale-95
+                              ${isHomePage ? "hidden md:block" : "block md:block"}
+                                `}
                   >
                     Logout
                   </button>
                 ) : (
                   <button
                     onClick={() => setAuthMode("login")}
-                    className="hidden md:block px-6 py-2.5 rounded-full bg-emerald-600 text-white text-[13px] font-bold hover:bg-emerald-700 transition-all active:scale-95 shadow-lg shadow-emerald-100"
+                    className={
+                      `px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all active:scale-95
+                      ${isHomePage ? "hidden md:block" : "block md:block"}
+                      `}
                   >
                     Member Login
                   </button>
@@ -160,32 +167,32 @@ const Navbar = () => {
 
         {/* MOBILE MENU */}
         <div
-          className={`
-    absolute top-full left-4 right-4 mt-3 z-50
-    lg:hidden transition-all duration-300
-    ${isOpen
-              ? "opacity-100 translate-y-0"
+          className={`fixed top-24 left-4 right-4 z-9999 lg:hidden transition-all duration-300
+          ${isOpen
+              ? "opacity-100 translate-y-0 pointer-events-auto"
               : "opacity-0 -translate-y-5 pointer-events-none"}
-  `}
+            `}
         >
           <div className="mx-auto w-full max-w-sm rounded-3xl border border-white/40 bg-white/85 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-4">
 
             {/* Nav Links */}
             <div className="space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link?.id}
-                  to={`/#${link?.id}`}
-                  onClick={() => setIsOpen(false)}
-                  className="group flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all"
-                >
-                  <div className="p-2 rounded-xl bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600 transition">
-                    {link?.icon}
-                  </div>
+              {isHomePage && (
+                (navLinks.map((link) => (
+                  <a
+                    key={link?.id}
+                    href={`/#${link?.id}`}
+                    onClick={() => setIsOpen(false)}
+                    className="group flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all"
+                  >
+                    <div className="p-2 rounded-xl bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600 transition">
+                      {link?.icon}
+                    </div>
 
-                  <span>{link?.name}</span>
-                </Link>
-              ))}
+                    <span>{link?.name}</span>
+                  </a>
+                )))
+              )}
             </div>
 
             {/* Divider */}
@@ -193,7 +200,15 @@ const Navbar = () => {
 
             {/* Action Button */}
             <button
-              className="w-full py-3 rounded-2xl bg-linear-to-r from-emerald-500 to-emerald-600 text-white font-semibold shadow-lg hover:scale-[1.02] transition-all"
+              onClick={() => {
+                setIsOpen(false);
+                if (user) {
+                  logout({ navigate });
+                } else {
+                  setAuthMode("login");
+                }
+              }}
+              className="w-full py-3 rounded-2xl bg-linear-to-r from-emerald-500 to-emerald-600 text-white font-semibold"
             >
               {user ? "Logout" : "Member Login"}
             </button>
