@@ -48,7 +48,7 @@ export const signup = async (req, res) => {
         message: "Password must contain at least 1 special character",
       });
     }
-    
+
     const userExists = await User.findOne({ email });
     if (userExists)
       return res.status(500).json({ message: "User alreadt exits" });
@@ -93,10 +93,20 @@ export const login = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send({ message: "User does not exists" });
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist" });
+    }
+    if (!user.password) {
+      return res.status(400).json({
+        message: "This account uses Google Sign-In",
+      });
+    }
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
-      return res.status(400).json({ message: "Invalid Credentials" });
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
 
     const newtoken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
