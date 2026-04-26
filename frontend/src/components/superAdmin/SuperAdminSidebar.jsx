@@ -47,7 +47,7 @@ const SuperAdminSideBar = () => {
       className="
         fixed
         h-screen
-        w-24 md:w-64
+        w-20 lg:w-64
         bg-linear-to-b from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6]
         border-r border-[#eadfca]
         flex flex-col
@@ -58,7 +58,7 @@ const SuperAdminSideBar = () => {
       "
     >
       {/* Brand */}
-      <div className="hidden md:flex flex-col items-center">
+        <div className="hidden lg:flex flex-col items-center">
         <img
           src="/Elite_logo.png"
           alt="Elite Logo"
@@ -76,7 +76,7 @@ const SuperAdminSideBar = () => {
       </div>
 
       {/* Mobile Icon */}
-      <div className="md:hidden w-12 h-12 rounded-2xl bg-[#fff7e6] flex items-center justify-center shadow-md">
+      <div className="lg:hidden w-12 h-12 rounded-2xl bg-[#fff7e6] flex items-center justify-center shadow-md">
         <ShieldCheck className="w-6 h-6 text-[#b88917]" />
       </div>
 
@@ -101,7 +101,7 @@ const SuperAdminSideBar = () => {
           >
             <span className="shrink-0">{link?.icon}</span>
 
-            <span className="hidden md:block text-sm font-semibold">
+            <span className="hidden lg:block text-sm font-semibold">
               {link?.name}
             </span>
           </NavLink>

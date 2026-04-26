@@ -90,9 +90,7 @@ const Hero = () => {
                     onChange={(e) => setDestination(e.target.value)}
                     className="w-full bg-transparent outline-none text-xs sm:text-sm md:text-base text-slate-700"
                   >
-                    <option value="" className="sm:hidden">City</option>
-                    <option value="" className="hidden sm:block">Where are you going?</option>
-
+                    <option value="" >Destination</option>
                     {cities.map((city) => (
                       <option key={city} value={city}>
                         {city}

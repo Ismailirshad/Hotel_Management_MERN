@@ -103,10 +103,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/hotelDetails/:id" element={<HotelDetails />} />
           <Route path="/roomDetails/:id" element={<RoomDetails />} />
-          <Route
-            path="/rooms"
-            element={user ? <AllRooms /> : <Navigate to="/" replace />}
-          />
+          <Route path="/rooms" element={<AllRooms />} />
           <Route path="/hotel/:id/rooms" element={<AllRooms />} />
           <Route
             path="/my-bookings"

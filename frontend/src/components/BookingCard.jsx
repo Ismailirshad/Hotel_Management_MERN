@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { bookingStore } from "../store/useBookingStore.js";
+import { useUserStore } from "../store/useUserStore.js";
 
 const BookingCard = ({ roomId }) => {
   const [checkIn, setCheckIn] = useState("");
@@ -14,6 +15,7 @@ const BookingCard = ({ roomId }) => {
   const isRoomAvailable = bookingStore((state) => state.isRoomAvailable);
   const loading = bookingStore((state) => state.loading);
   const bookRoom = bookingStore((state) => state.bookRoom);
+  const user = useUserStore((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -25,6 +27,11 @@ const BookingCard = ({ roomId }) => {
 
   const handleConfirmBooking = async () => {
     try {
+      if (!user) {
+        toast.error("Please login to booking");
+        return;
+      }
+
       const booking = await bookRoom(id, checkIn, checkOut, guests)
       navigate(`/payment/${booking._id}`)
 

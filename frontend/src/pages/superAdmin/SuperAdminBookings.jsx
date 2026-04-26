@@ -48,7 +48,7 @@ const SuperAdminBookings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6] text-slate-800 p-0 sm:p-6 md:p-10">
+    <div className="min-h-screen bg-linear-to-br from-[#f8f4ea] via-[#fdfaf4] to-[#efe7d6] text-slate-800 p-2 sm:p-4 md:p-6 xl:p-10">
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
@@ -56,7 +56,7 @@ const SuperAdminBookings = () => {
             Reservation Control Center
           </p>
 
-          <h1 className="text-4xl font-bold text-slate-900">All Bookings</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900">All Bookings</h1>
 
           <p className="text-slate-500 mt-2 max-w-2xl">
             View and monitor all reservations, guest details, stay dates and
@@ -71,8 +71,8 @@ const SuperAdminBookings = () => {
 
       {/* Table Card */}
       <div className="rounded-3xl bg-white border border-[#eadfca] shadow-lg ">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="w-full overflow-x-auto">
+          <table className="min-w-[900px] w-full text-sm">
             <thead>
               <tr className="border-b border-[#eadfca] text-slate-500">
                 <th className="text-left px-6 py-4">Booked On</th>
