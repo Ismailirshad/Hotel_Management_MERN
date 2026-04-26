@@ -21,7 +21,7 @@ const Testimonials = () => {
 
   return (
     <section
-      id="offers"
+      id="about"
       className="relative w-full overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950"
     >
       {/* Background Glow */}
