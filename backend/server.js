@@ -27,7 +27,6 @@ app.listen(PORT, "0.0.0.0", async () => {
   await connectDb();
 });
 
-
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../../schema/userSchema.js";
 import sendEmail from "../../email/nodemailer.js";
 import OtpTemplate from "../../email/forgotPassword.js";
+import WelcomeTemplate from "../../email/welcomeEmail.js";
 
 export const signup = async (req, res) => {
   try {
@@ -67,6 +68,8 @@ export const signup = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     const { _id } = user;
+
+     await sendEmail(user.email, "Welcome Email", WelcomeTemplate(user.name))
     res.status(201).json({
       message: "User created successfully",
       user: { _id, name, email },
